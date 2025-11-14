@@ -58,8 +58,9 @@ section{min-height:100vh;padding:120px 20px;display:flex;align-items:center;just
 .center-card p{margin-top:8px;color:var(--muted)}
 .card-shadow{position:absolute;width:560px;height:360px;border-radius:20px;background:radial-gradient(ellipse at center, rgba(0,60,90,0.16), rgba(0,0,0,0));filter:blur(36px);z-index:-1;transition:transform .12s}
 
-/* reflection pseudo layer */
-.center-card::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent 40%);mix-blend-mode:overlay;opacity:0.6}
+/* small timeline scrub visual (editor easter egg) */
+.timeline-scrub{position:absolute;left:50%;transform:translateX(-50%);bottom:22px;width:60%;height:8px;border-radius:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.03);overflow:hidden;display:none;pointer-events:none;z-index:50}
+.timeline-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));transition:width .36s cubic-bezier(.2,.9,.2,1)}
 
 /* portfolio */
 .portfolio{width:100%}
@@ -71,16 +72,22 @@ section{min-height:100vh;padding:120px 20px;display:flex;align-items:center;just
 
 /* contact */
 form{display:flex;flex-direction:column;gap:12px;max-width:520px;margin-top:10px}
+label{font-size:0.84rem;color:var(--muted);font-weight:600}
+.input-row{display:flex;flex-direction:column;gap:6px}
 input,textarea,button{border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eafcff;font-size:0.98rem;outline:none}
-button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#012;font-weight:700;border:none}
+button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#012;font-weight:700;border:none;transition:transform .12s}
+button:active{transform:translateY(2px)}
 
-/* right-side scroll indicator and custom scrollbar */
-.right-ui{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;align-items:center;z-index:70;pointer-events:auto}
-.dot{width:12px;height:12px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:transform .28s,background .28s,box-shadow .28s}
+/* right-side scroll indicator and custom scrollbar (moved a bit left) */
+.right-ui{position:fixed;right:48px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;align-items:center;z-index:70;pointer-events:auto}
+.dot{width:12px;height:12px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:transform .28s,background .28s,box-shadow .28s;animation:float 3.8s ease-in-out infinite}
+@keyframes float{0%{transform:translateY(0) }50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+.dot:nth-child(2){animation-delay:0.2s}
+.dot:nth-child(3){animation-delay:0.45s}
 .dot.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 10px 30px rgba(0,0,0,0.5);transform:scale(1.15)}
 
 /* custom scroll track + thumb (vertical) */
-.scroll-track{position:fixed;right:8px;top:12px;bottom:12px;width:8px;border-radius:999px;background:rgba(255,255,255,0.03);z-index:65;display:flex;align-items:flex-start;justify-content:center;padding:6px;pointer-events:none}
+.scroll-track{position:fixed;right:36px;top:12px;bottom:12px;width:8px;border-radius:999px;background:rgba(255,255,255,0.03);z-index:65;display:flex;align-items:flex-start;justify-content:center;padding:6px;pointer-events:none}
 .scroll-thumb{width:6px;border-radius:999px;background:linear-gradient(90deg,var(--accent1),var(--accent2));height:80px;transform:translateY(0);transition:transform .16s cubic-bezier(.2,.9,.2,1);will-change:transform}
 
 /* small reveal animations */
@@ -115,7 +122,7 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--acce
         <!-- uses uploaded mp4 if present -->
         <video id="logoVideo" src="/mnt/data/chrollo.mp4" autoplay muted loop playsinline></video>
       </div>
-      <div class="site-title">Litecor</div>
+      <div class="site-title" id="siteTitle">Litecor</div>
     </div>
 
     <nav id="topNav" aria-label="Primary">
@@ -154,7 +161,9 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--acce
             <div class="center-card" id="centerCard" role="main" aria-label="Litecor main card">
               <h2>Welcome to Litecor's Space</h2>
               <p>Something new is taking shape — available for editing work.</p>
-              <div class="muted" style="margin-top:12px;font-weight:600">Mithun M Murthy</div>
+              <div class="muted" style="margin-top:12px;font-weight:600" id="nameLabel">Litecor</div>
+              <!-- timeline scrub visual that appears briefly for logo click -->
+              <div class="timeline-scrub" id="timelineScrub"><div class="timeline-bar" id="timelineBar"></div></div>
             </div>
           </div>
         </div>
@@ -181,11 +190,13 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--acce
   <section id="contact">
     <div class="container">
       <h2 class="reveal">Contact</h2>
+
       <form class="reveal" id="contactForm" action="https://formspree.io/f/meorknln" method="POST" onsubmit="handleForm(event)">
-        <input name="name" placeholder="Your name" required />
-        <input name="email" type="email" placeholder="Email" required />
-        <textarea name="message" rows="5" placeholder="Message" required></textarea>
-        <button type="submit">Send message</button>
+        <div class="input-row"><label for="name">Name</label><input id="name" name="name" placeholder="Your full name" required /></div>
+        <div class="input-row"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="your@email.com" required /></div>
+        <div class="input-row"><label for="message">Message</label><textarea id="message" name="message" rows="5" placeholder="Tell Litecor what you need" required></textarea></div>
+        <button type="submit" id="submitBtn">Send message</button>
+        <div style="margin-top:8px;color:var(--muted);font-size:0.92rem">Or email directly at <strong style="color:var(--accent1)">hello@litecor.example</strong> (placeholder)</div>
       </form>
     </div>
   </section>
@@ -193,9 +204,6 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--acce
 
 <!-- background music (placeholder) -->
 <audio id="bgMusic" src="placeholder.mp3" loop preload="none"></audio>
-
-<!-- confetti canvas (lightweight) -->
-<canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:85"></canvas>
 
 <!-- bottom message -->
 <div class="bottom-note" id="bottomNote"></div>
@@ -217,9 +225,11 @@ const centerCard = $('#centerCard');
 const cardInteract = $('#cardInteract');
 const cardShadow = $('#cardShadow');
 const cursorTrail = $('#cursorTrail');
-const confettiCanvas = $('#confetti');
 const bottomNote = $('#bottomNote');
 const bgMusic = $('#bgMusic');
+const timelineScrub = $('#timelineScrub');
+const timelineBar = $('#timelineBar');
+const nameLabel = $('#nameLabel');
 
 /* --- Smooth scroll helper (duration easing) --- */
 function smoothScrollTo(el, duration = 700){
@@ -285,15 +295,13 @@ const io = new IntersectionObserver((entries)=>{
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* --- Card parallax like Cheeku (larger interaction area) --- */
-let mouse = {x:-9999,y:-9999};
 let anim = {rx:0,ry:0,tx:0,ty:0,scale:1};
 let zone = {rx:0,ry:0,tx:0,ty:0,scale:1};
 const maxTilt = 12;
-let cx = 0, cy = 0;
 cardInteract.addEventListener('mousemove', (e) => {
   const r = centerCard.getBoundingClientRect();
-  cx = r.left + r.width/2;
-  cy = r.top + r.height/2;
+  const cx = r.left + r.width/2;
+  const cy = r.top + r.height/2;
   const dx = (e.clientX - cx) / (r.width/2);
   const dy = (e.clientY - cy) / (r.height/2);
   const sx = Math.sign(dx) * Math.pow(Math.abs(dx), 1.4);
@@ -355,95 +363,58 @@ window.addEventListener('mousemove', (e)=>{ mx = e.clientX; my = e.clientY; });
   requestAnimationFrame(trailLoop);
 })();
 
-/* --- lightweight confetti for logo click --- */
-confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight;
-window.addEventListener('resize', ()=>{ confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight; });
-
-let confActive = false;
+/* --- Editor-themed easter eggs --- */
+/* Logo click: timeline scrub visual + small editor icon particle */
 logoBtn.addEventListener('click', (e) => {
-  // bounce animation
   logoBtn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(0.98)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.2,.9,.2,1)'});
-  // spawn confetti-lite
-  if(!confActive) runConfetti(e.clientX, e.clientY, 2000);
-  // spawn music notes when logo clicked
-  spawnMusicNotes();
+  // timeline scrub animation
+  timelineScrub.style.display = 'block';
+  timelineBar.style.width = '0%';
+  setTimeout(()=> timelineBar.style.width = '92%', 30);
+  setTimeout(()=> { timelineBar.style.width = '0%'; }, 420);
+  setTimeout(()=> timelineScrub.style.display = 'none', 900);
+  spawnEditorParticles();
 });
 
-function runConfetti(sx, sy, duration){
-  confActive = true;
-  const ctx = confettiCanvas.getContext('2d');
-  const parts = [];
-  const count = 32;
-  const start = performance.now();
-  for(let i=0;i<count;i++){
-    parts.push({
-      x: sx + (Math.random()-0.5)*60,
-      y: sy + (Math.random()-0.5)*40,
-      vx: (Math.random()-0.5)*6,
-      vy: -8 - Math.random()*6,
-      r: 6 + Math.random()*6,
-      color: ['#ff6b6b','#ffd166','#4ecdc4','#ffd1ff','#ffb86b'][Math.floor(Math.random()*5)],
-      rot: Math.random()*360,
-      drot: (Math.random()-0.5)*6
-    });
-  }
-  function frame(now){
-    const t = now - start;
-    ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
-    for(let p of parts){
-      p.vy += 0.28;
-      p.x += p.vx; p.y += p.vy; p.rot += p.drot;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot * Math.PI/180);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
-      ctx.restore();
-    }
-    if(t < duration) requestAnimationFrame(frame);
-    else { ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height); confActive = false; }
-  }
-  requestAnimationFrame(frame);
+/* spawn editor icons (very light) */
+function spawnEditorParticles(){
+  const icons = ['✂️','▶','⏱️'];
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  const r = logoBtn.getBoundingClientRect();
+  wrapper.style.left = (r.left + r.width/2) + 'px';
+  wrapper.style.top = (r.top + r.height/2) + 'px';
+  wrapper.style.pointerEvents = 'none';
+  wrapper.style.zIndex = 95;
+  document.body.appendChild(wrapper);
+  const el = document.createElement('div');
+  el.style.fontSize = '16px';
+  el.style.opacity = '0';
+  el.textContent = icons[Math.floor(Math.random()*icons.length)];
+  wrapper.appendChild(el);
+  requestAnimationFrame(()=>{ el.style.transform = 'translateY(-36px) scale(1.2)'; el.style.opacity = '1'; el.style.transition = 'transform .8s cubic-bezier(.2,.9,.2,1), opacity .8s'; });
+  setTimeout(()=>{ el.style.opacity = '0'; el.style.transform = 'translateY(-80px) scale(.9)'; }, 480);
+  setTimeout(()=> document.body.removeChild(wrapper), 900);
 }
 
-/* spawn quick music-note particle (text) */
-function spawnMusicNotes(){
-  const c = document.createElement('div');
-  c.style.position='fixed'; c.style.left=(logoBtn.getBoundingClientRect().left+18)+'px';
-  c.style.top=(logoBtn.getBoundingClientRect().top+8)+'px'; c.style.pointerEvents='none'; c.style.zIndex='90';
-  document.body.appendChild(c);
-  const n = document.createElement('div'); n.textContent='♪'; n.style.fontSize='18px'; n.style.opacity='0'; n.style.transition='transform .9s cubic-bezier(.2,.9,.2,1),opacity .9s';
-  c.appendChild(n);
-  requestAnimationFrame(()=>{ n.style.transform='translateY(-40px) scale(1.2)'; n.style.opacity='1'; });
-  setTimeout(()=>{ n.style.opacity='0'; n.style.transform='translateY(-80px) scale(.9)'; }, 420);
-  setTimeout(()=>document.body.removeChild(c), 900);
-}
-
-/* --- background 3-click message and name 5-click (67) --- */
+/* Background 3-click => "that's not a cut" */
 let bgClicks = 0, bgTimer = null;
 document.addEventListener('click', (e)=>{
-  // ignore clicks on UI
-  if(e.target.closest('nav') || e.target.closest('.center-card') || e.target.closest('.logo-vid') || e.target.closest('a') ) return;
+  if(e.target.closest('nav') || e.target.closest('.center-card') || e.target.closest('.logo-vid') || e.target.closest('a')) return;
   bgClicks++;
   if(bgTimer) clearTimeout(bgTimer);
   bgTimer = setTimeout(()=> bgClicks = 0, 700);
-  if(bgClicks >= 3){
-    bgClicks = 0; showBottomMessage('stop clicking the void', 2000);
-  }
+  if(bgClicks >= 3){ bgClicks = 0; showBottomMessage("that's not a cut", 2000); }
 });
 
-/* name 5 clicks */
+/* name 5-clicks => "Frame 67" */
 let nameBtnClicks = 0, nameBtnTimer = null;
-const nameEl = centerCard.querySelector('.muted');
-nameEl && nameEl.addEventListener('click', ()=>{
+nameLabel && nameLabel.addEventListener('click', ()=>{
   nameBtnClicks++;
   if(nameBtnTimer) clearTimeout(nameBtnTimer);
   nameBtnTimer = setTimeout(()=> nameBtnClicks = 0, 1200);
-  if(nameBtnClicks >= 5){ nameBtnClicks = 0; showBottomMessage('67', 2000); }
+  if(nameBtnClicks >= 5){ nameBtnClicks = 0; showBottomMessage('Frame 67', 2000); }
 });
-
-/* status (Under Development) message: show patience */
-const statusBox = document.querySelector('#topNav') || null; // we don't have a separate status UI now; if you add it, wire similarly
 
 /* bottom helper */
 let bottomTimer = null;
@@ -454,24 +425,23 @@ function showBottomMessage(msg, dur=2000){
   bottomTimer = setTimeout(()=>{ bottomNote.style.opacity = '0'; bottomNote.style.transform = 'translateX(-50%) translateY(12px)'; }, dur);
 }
 
-/* small wrapper to keep the same function name as old code */
-function showBottomMessageAlias(m,d){ showBottomMessage(m,d); }
-
 /* contact form handler */
 async function handleForm(e){
   e.preventDefault();
   const f = e.target;
   const btn = f.querySelector('button');
   btn.disabled = true;
+  btn.style.transform = 'scale(.98)';
   try{
     const res = await fetch(f.action, {method:'POST', body:new FormData(f), headers:{'Accept':'application/json'}});
     if(res.ok){ showBottomMessage('Message sent — thanks!', 2000); f.reset(); }
     else { showBottomMessage('Failed to send. Try again.', 2000); }
   } catch(err){ showBottomMessage('Network error',2000); }
   btn.disabled = false;
+  setTimeout(()=> btn.style.transform = '', 160);
 }
 
-/* music: play only after first user gesture */
+/* music: play only after first user gesture (keeps browsers happy) */
 let musicAllowed = false;
 function enableMusicOnce(){
   if(musicAllowed) return;
@@ -481,22 +451,16 @@ function enableMusicOnce(){
 }
 document.addEventListener('click', enableMusicOnce, {once:true});
 
-/* initial reveal on load (small delay) */
+/* initial reveal on load */
 window.addEventListener('load', ()=> {
   document.querySelectorAll('.reveal').forEach((el,i)=> setTimeout(()=> el.classList.add('in'), 120 + i*60));
   updateActive();
 });
-
-/* ensure scroll thumb updates on resize */
 window.addEventListener('resize', throttle(()=> updateActive(), 120));
 
-/* quick accessibility: ESC closes any active tab arrow states (no popouts present) */
+/* accessibility escape */
 document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape'){
-    // just ensure nothing weird persists
-    dots.forEach(d => d.classList.remove('active'));
-    updateActive();
-  }
+  if(e.key === 'Escape'){ dots.forEach(d => d.classList.remove('active')); updateActive(); }
 });
 </script>
 </body>

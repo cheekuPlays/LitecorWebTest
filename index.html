@@ -33,9 +33,9 @@ html::-webkit-scrollbar { display: none; }
 
 /* top nav */
 header{position:fixed;left:0;right:0;top:14px;height:64px;display:flex;align-items:center;justify-content:center;padding:0 18px;z-index:60;pointer-events:auto}
-.nav-inner{width:min(1200px,calc(100% - 40px));display:flex;align-items:center;justify-content:space-between}
-/* move logo more left by letting it take the left space */
-.logo-wrap{display:flex;align-items:center;gap:12px;margin-right:auto; margin-left:6px}
+.nav-inner{width:min(1200px,calc(100% - 40px));display:flex;align-items:center;justify-content:space-between;position:relative}
+/* logo block absolutely positioned so it sits a lot more to the left */
+.logo-wrap{display:flex;align-items:center;gap:12px;position:absolute;left:10px;top:50%;transform:translateY(-50%);z-index:72}
 .logo-vid{width:64px;height:64px;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,0.6);cursor:pointer;flex:0 0 64px}
 .logo-vid video{width:100%;height:100%;object-fit:cover;display:block}
 
@@ -51,7 +51,7 @@ header{position:fixed;left:0;right:0;top:14px;height:64px;display:flex;align-ite
 }
 
 /* NAV BUTTONS: match audio button style (glass box) */
-nav{display:flex;gap:12px;align-items:center}
+nav{display:flex;gap:12px;align-items:center;margin-left:auto}
 nav a{
   color:rgba(234,252,255,0.92);
   text-decoration:none;
@@ -607,6 +607,19 @@ window.addEventListener('load', ()=> {
   updateActive();
 });
 window.addEventListener('resize', throttle(()=> updateActive(), 120));
+
+/* Update active dot on scroll (throttled) */
+function throttle(fn, wait){ let last=0; return (...args)=>{ const now=Date.now(); if(now - last > wait){ last = now; fn(...args); } } }
+function updateActive(){
+  sections.forEach((s,i) => {
+    const top = s.offsetTop;
+    const bottom = top + s.offsetHeight;
+    if(window.scrollY >= top - 80 && window.scrollY < bottom - 80){
+      dots.forEach(x => x.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+  });
+}
 
 /* accessibility escape */
 document.addEventListener('keydown', (e) => {

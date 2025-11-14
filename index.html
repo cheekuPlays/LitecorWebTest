@@ -55,9 +55,20 @@ nav a:hover{transform:translateY(-3px);background:rgba(255,255,255,0.02);border-
 
 /* audio control (moved left from extreme right) */
 .audio-control{position:fixed;top:18px;right:84px;z-index:75;display:flex;align-items:center;gap:8px;pointer-events:auto}
-.audio-btn{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.audio-panel{position:fixed;top:72px;right:84px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);display:none;flex-direction:column;gap:8px;width:220px}
-.audio-panel.show{display:flex}
+.audio-btn{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s}
+.audio-btn.open{ transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+
+/* audio panel now animates via opacity+transform for smooth pop-in/out */
+.audio-panel{
+  position:fixed;top:72px;right:84px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);
+  display:flex;flex-direction:column;gap:8px;width:220px;z-index:76;
+  opacity:0; transform: translateY(-8px) scale(.98); pointer-events:none;
+  transition: opacity 260ms cubic-bezier(.2,.9,.2,1), transform 260ms cubic-bezier(.2,.9,.2,1);
+}
+/* visible state */
+.audio-panel.show{
+  opacity:1; transform: translateY(0) scale(1); pointer-events:auto;
+}
 
 /* custom styling for the range so it reaches the ends and we can visually fill it */
 /* HIDE the thumb (removes the little ball) but keep slider draggable */
@@ -80,7 +91,6 @@ input[type="range"]::-webkit-slider-thumb{
 input[type="range"]::-moz-range-thumb{
   width:0;height:0;background:transparent;border:none;box-shadow:none;
 }
-/* keep visual track minimal for browsers that show it */
 input[type="range"]::-webkit-slider-runnable-track{height:10px;border-radius:999px;background:transparent}
 input[type="range"]::-moz-range-track{height:10px;border-radius:999px;background:transparent}
 
@@ -529,15 +539,17 @@ document.addEventListener('click', enableMusicOnce, {once:true});
 /* Audio controls wiring + visual fill for range so ends map correctly and no tiny right leftover */
 function updateRangeBackground(input){
   const v = Math.max(0, Math.min(1, parseFloat(input.value)));
-  // round to avoid tiny leftover; ensure 0..100
   const pct = Math.min(100, Math.max(0, Math.round(v * 100)));
-  // gradient split exactly at pct to avoid tiny right-end artifact
   input.style.background = `linear-gradient(90deg, var(--accent1) ${pct}%, rgba(255,255,255,0.06) ${pct}%)`;
 }
+
+/* toggle panel with smooth animation and button pop */
 audioBtn.addEventListener('click', (e)=>{
   const opened = audioPanel.classList.toggle('show');
   audioBtn.setAttribute('aria-expanded', opened ? 'true' : 'false');
+  audioBtn.classList.toggle('open', opened);
 });
+
 /* auto-close when pointer leaves the combined audio area (btn + panel) */
 let audioCloseTimer = null;
 const audioArea = [audioBtn, audioPanel];
@@ -547,6 +559,7 @@ audioArea.forEach(el => {
     audioCloseTimer = setTimeout(()=> {
       audioPanel.classList.remove('show');
       audioBtn.setAttribute('aria-expanded','false');
+      audioBtn.classList.remove('open');
     }, 360);
   });
 });

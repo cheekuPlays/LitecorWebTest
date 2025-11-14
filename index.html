@@ -1,133 +1,252 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Litecor</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: white;
-      scroll-behavior: smooth;
-    }
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(6px);
-      padding: 15px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 10;
-    }
-    nav a {
-      margin-left: 20px;
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      transition: 0.2s;
-    }
-    nav a:hover {
-      opacity: 0.7;
-    }
-    .section {
-      padding: 120px 40px;
-      min-height: 100vh;
-    }
-    #logoGif {
-      width: 70px;
-      height: auto;
-    }
-    .videoGrid {
-      display: grid;
-      gap: 30px;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-    iframe {
-      width: 100%;
-      aspect-ratio: 16/9;
-      border-radius: 10px;
-    }
-    form {
-      max-width: 400px;
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    input, textarea {
-      padding: 12px;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-    }
-    button {
-      padding: 12px;
-      border: none;
-      border-radius: 5px;
-      background: white;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #bgMusic {
-      display: none;
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Litecor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#071227; --bg2:#082033; --accent1:#00bcd4; --accent2:#6a00ff; --glass: rgba(255,255,255,0.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial;color:#e6f7ff;background:linear-gradient(120deg,var(--bg1) 0%,var(--bg2) 100%);}
+  body{overflow-y:auto;scroll-behavior: auto;}
+
+  /* Background moving gradient + orbs */
+  .bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .bg-gradient{position:absolute;inset:-20%;background:linear-gradient(45deg,#061426,#082b3a,#08132a);filter:blur(28px);opacity:0.9;animation:gradShift 18s linear infinite}
+  @keyframes gradShift{0%{transform:translateX(-6%)}50%{transform:translateX(6%)}100%{transform:translateX(-6%)}}
+  .orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:0.55;mix-blend-mode:screen}
+  .orb.o1{width:420px;height:420px;background:radial-gradient(circle,#00bcd4 0%,transparent 45%);left:-8%;top:10%;animation:orbMove1 28s linear infinite}
+  .orb.o2{width:360px;height:360px;background:radial-gradient(circle,#6a00ff 0%,transparent 45%);right:-6%;top:30%;animation:orbMove2 24s linear infinite}
+  .orb.o3{width:300px;height:300px;background:radial-gradient(circle,#3ddc97 0%,transparent 45%);left:20%;bottom:-6%;animation:orbMove3 32s linear infinite}
+  @keyframes orbMove1{0%{transform:translateY(0)}50%{transform:translateY(18px)}100%{transform:translateY(0)}}
+  @keyframes orbMove2{0%{transform:translateY(0)}50%{transform:translateY(-28px)}100%{transform:translateY(0)}}
+  @keyframes orbMove3{0%{transform:translateY(0)}50%{transform:translateY(12px)}100%{transform:translateY(0)}}
+
+  /* header */
+  header{position:fixed;left:0;right:0;top:14px;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:40;pointer-events:auto}
+  .nav-inner{width:min(1200px,calc(100% - 56px));margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+  .logo-wrap{display:flex;align-items:center;gap:12px}
+  .logo-vid{width:56px;height:56px;border-radius:10px;overflow:hidden;box-shadow:0 6px 22px rgba(0,0,0,0.6);cursor:pointer}
+  .logo-vid video{width:100%;height:100%;object-fit:cover;display:block}
+  nav{display:flex;gap:14px;align-items:center}
+  nav a{color:#dff8ff;text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600;backdrop-filter:blur(8px);background:transparent;border:1px solid transparent;transition:all .28s}
+  nav a:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.04);transform:translateY(-3px)}
+
+  /* page layout */
+  main{position:relative;z-index:20}
+  section{min-height:100vh;padding:120px 24px;display:flex;align-items:center;justify-content:center}
+  .container{width:min(1100px,94%);margin:0 auto}
+
+  /* home */
+  .hero{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+  .hero h1{font-size:clamp(28px,4.2vw,48px);margin:0;color:var(--accent1);letter-spacing:0.2px}
+  .hero p{max-width:780px;color:rgba(234,252,255,0.9);margin:0;font-size:1.05rem}
+  .card{margin-top:18px;padding:28px;border-radius:16px;background:rgba(255,255,255,0.03);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.04);width:min(820px,92%);display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 18px 60px rgba(3,6,23,0.6);transition:transform .18s ease}
+  .card .tag{font-weight:700;color:rgba(255,255,255,0.9)}
+
+  /* portfolio */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px}
+  .vid-card{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));}
+  .vid-card iframe{width:100%;height:100%;min-height:200px;border:0}
+
+  /* contact */
+  form{display:flex;flex-direction:column;gap:12px;max-width:520px}
+  input,textarea,button{border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eafcff;font-size:0.98rem}
+  button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#001;font-weight:700;border:none}
+
+  /* right side scroll indicator */
+  .scroll-ind{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:60}
+  .dot{width:10px;height:10px;border-radius:999px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all .18s}
+  .dot.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+
+  /* subtle in-view animation */
+  .reveal{opacity:0;transform:translateY(8px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* small utilities */
+  .muted{opacity:0.8;color:rgba(234,252,255,0.7)}
+  @media(max-width:720px){header{padding:0 12px}.logo-vid{width:48px;height:48px}}
+</style>
 </head>
 <body>
 
+<!-- background layers -->
+<div class="bg-wrap" aria-hidden>
+  <div class="bg-gradient"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
 <header>
-  <img id="logoGif" src="chrollo.gif" alt="Litecor Logo" />
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#portfolio">Portfolio</a>
-    <a href="#contact">Contact</a>
-    <a href="#files">Files</a>
-  </nav>
+  <div class="nav-inner">
+    <div class="logo-wrap">
+      <div class="logo-vid" id="logoBtn" title="Litecor">
+        <!-- use mp4 uploaded as small looping muted video; fallback to gif if provided -->
+        <video src="/mnt/data/chrollo.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div style="font-weight:700;color:var(--accent1);margin-left:6px">Litecor</div>
+    </div>
+    <nav id="topNav">
+      <a href="#home" data-target="home">Home</a>
+      <a href="#portfolio" data-target="portfolio">Portfolio</a>
+      <a href="#contact" data-target="contact">Contact</a>
+      <a href="#files" data-target="files">Files</a>
+    </nav>
+  </div>
 </header>
 
-<audio id="bgMusic" autoplay loop>
-  <source src="placeholder.mp3" type="audio/mp3" />
-</audio>
-
-<div class="section" id="home">
-  <h1>Litecor — Video Editor</h1>
-  <p>Clean cuts, sharp pacing, and storytelling that keeps people watching.</p>
+<!-- right scroll indicator -->
+<div class="scroll-ind" id="scrollInd" aria-hidden>
+  <div class="dot" data-target="home"></div>
+  <div class="dot" data-target="portfolio"></div>
+  <div class="dot" data-target="contact"></div>
+  <div class="dot" data-target="files"></div>
 </div>
 
-<div class="section" id="portfolio">
-  <h2>Portfolio</h2>
-  <div class="videoGrid">
-    <iframe src="https://www.youtube.com/embed/T4LQeFQnjWU" allowfullscreen></iframe>
-    <iframe src="https://www.youtube.com/embed/759NWZ98wFE" allowfullscreen></iframe>
-  </div>
-</div>
+<main>
+  <section id="home">
+    <div class="container">
+      <div class="hero reveal">
+        <h1>Litecor — Editor & Visual Storyteller</h1>
+        <p class="muted">Crafting clean rhythm, punchy pacing, and audience-focused edits. Longform, short-form, clipping — all with intent.</p>
+        <div class="card">
+          <div class="tag">Now available for editing work • Contact below</div>
+          <div class="muted">Two sample edits and a simple download in portfolio</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="section" id="contact">
-  <h2>Contact Me</h2>
-  <form action="https://formspree.io/f/meorknln" method="POST">
-    <input type="text" name="name" placeholder="Your Name" required />
-    <input type="email" name="email" placeholder="Your Email" required />
-    <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-    <button type="submit">Send</button>
-  </form>
-</div>
+  <section id="portfolio">
+    <div class="container">
+      <h2 class="reveal">Portfolio</h2>
+      <div class="grid" style="margin-top:18px">
+        <div class="vid-card reveal">
+          <iframe src="https://www.youtube.com/embed/T4LQeFQnjWU" title="Longform sample" allowfullscreen></iframe>
+        </div>
+        <div class="vid-card reveal">
+          <iframe src="https://www.youtube.com/embed/759NWZ98wFE" title="Clipping sample" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="section" id="files">
-  <h2>Files</h2>
-  <p><a href="chrollo.mp4" download>chrollo.mp4</a></p>
-</div>
+  <section id="contact">
+    <div class="container">
+      <h2 class="reveal">Contact</h2>
+      <form action="https://formspree.io/f/meorknln" method="POST" class="reveal" onsubmit="handleForm(event)">
+        <input name="name" placeholder="Your name" required />
+        <input name="email" type="email" placeholder="Email" required />
+        <textarea name="message" rows="5" placeholder="Message" required></textarea>
+        <button type="submit">Send message</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="files">
+    <div class="container">
+      <h2 class="reveal">Files</h2>
+      <p class="reveal muted">chrollo.mp4 — available for download below.</p>
+      <p class="reveal"><a href="/mnt/data/chrollo.mp4" download style="color:var(--accent1);text-decoration:none">Download chrollo.mp4</a></p>
+    </div>
+  </section>
+</main>
+
+<!-- background music (placeholder) -->
+<audio id="bgMusic" src="placeholder.mp3" loop preload="none"></audio>
 
 <script>
-  document.body.addEventListener("click", () => {
-    const music = document.getElementById("bgMusic");
-    if (music.paused) music.play();
-  });
-</script>
+// helper: smooth scroll with duration
+function smoothScrollTo(el, duration = 700) {
+  const startY = window.scrollY || window.pageYOffset;
+  const targetRect = el.getBoundingClientRect();
+  const targetY = startY + targetRect.top;
+  const startTime = performance.now();
+  function ease(t){ return 1 - Math.pow(1 - t, 3); }
+  function step(now){
+    const t = Math.min(1, (now - startTime) / duration);
+    window.scrollTo(0, Math.round(startY + (targetY - startY) * ease(t)));
+    if(t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 
+// nav clicks -> smooth scroll
+document.querySelectorAll('nav a').forEach(a=>{
+  a.addEventListener('click', e =>{
+    e.preventDefault();
+    const target = document.getElementById(a.dataset.target);
+    if(target) smoothScrollTo(target, 800);
+  });
+});
+// scroll indicator clicks
+document.querySelectorAll('.scroll-ind .dot').forEach(d=>{
+  d.addEventListener('click', ()=>{
+    const t = document.getElementById(d.dataset.target);
+    if(t) smoothScrollTo(t, 800);
+  });
+});
+
+// highlight active section in scroll indicator
+const sections = ['home','portfolio','contact','files'].map(id=>document.getElementById(id));
+const dots = Array.from(document.querySelectorAll('.scroll-ind .dot'));
+function updateActive(){
+  const mid = window.innerHeight/3 + window.scrollY;
+  sections.forEach((s,i)=>{
+    const r = s.getBoundingClientRect();
+    const top = s.offsetTop; const bottom = top + s.offsetHeight;
+    if(window.scrollY >= top - 60 && window.scrollY < bottom - 60){dots.forEach(x=>x.classList.remove('active'));dots[i].classList.add('active');}
+  });
+}
+window.addEventListener('scroll', throttle(updateActive, 100));
+updateActive();
+
+// reveal on scroll
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// simple throttle
+function throttle(fn, wait){ let t=0; return (...a)=>{ const now=Date.now(); if(now - t > wait){ t = now; fn(...a); } } }
+
+// logo click effect
+const logoBtn = document.getElementById('logoBtn');
+logoBtn.addEventListener('click', ()=>{
+  logoBtn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(0.98)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.2,.9,.2,1)'});
+  // spawn quick particles (very light)
+  spawnNoteParticles();
+});
+
+function spawnNoteParticles(){
+  const c = document.createElement('div');
+  c.style.position='fixed';c.style.left=(logoBtn.getBoundingClientRect().left+20)+'px';c.style.top=(logoBtn.getBoundingClientRect().top+10)+'px';c.style.pointerEvents='none';document.body.appendChild(c);
+  const span=document.createElement('div');span.textContent='♪';span.style.fontSize='18px';span.style.opacity='0';span.style.transition='transform .9s cubic-bezier(.2,.9,.2,1),opacity .9s';c.appendChild(span);
+  requestAnimationFrame(()=>{span.style.transform='translateY(-40px) scale(1.3)';span.style.opacity='1';});
+  setTimeout(()=>{span.style.opacity='0';span.style.transform='translateY(-80px) scale(.9)';},420);
+  setTimeout(()=>document.body.removeChild(c),950);
+}
+
+// background music: starts only after user gesture
+const music = document.getElementById('bgMusic');
+let musicAllowed=false;
+function enableMusicOnce(){ if(musicAllowed) return; musicAllowed=true; try{ music.volume=0.18; music.play().catch(()=>{}); }catch(_){} document.removeEventListener('click', enableMusicOnce); }
+document.addEventListener('click', enableMusicOnce, {once:true});
+
+// contact form UX
+function handleForm(e){ e.preventDefault(); const f=e.target; const btn = f.querySelector('button'); btn.disabled=true; fetch(f.action, {method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}}).then(r=>{ if(r.ok){ showBottomMessage('Message sent — thanks!',2000); f.reset(); } else { showBottomMessage('Failed to send. Try again.',2000);} btn.disabled=false; }).catch(()=>{ showBottomMessage('Network error',2000); btn.disabled=false; }); }
+
+// bottom message helper (re-usable)
+let bottomTimer=null; const bottomMsg=document.createElement('div'); bottomMsg.className='bottom-note'; bottomMsg.style.position='fixed'; bottomMsg.style.left='50%'; bottomMsg.style.transform='translateX(-50%) translateY(12px)'; bottomMsg.style.bottom='22px'; bottomMsg.style.background='rgba(0,0,0,0.5)'; bottomMsg.style.padding='10px 14px'; bottomMsg.style.borderRadius='10px'; bottomMsg.style.color='#eafcff'; bottomMsg.style.zIndex='80'; bottomMsg.style.opacity='0'; bottomMsg.style.transition='opacity .18s,transform .28s'; document.body.appendChild(bottomMsg);
+function showBottomMessage(msg, duration=2000){ bottomMsg.textContent=msg; bottomMsg.style.opacity='1'; bottomMsg.style.transform='translateX(-50%) translateY(0)'; clearTimeout(bottomTimer); bottomTimer=setTimeout(()=>{ bottomMsg.style.opacity='0'; bottomMsg.style.transform='translateX(-50%) translateY(12px)'; }, duration); }
+
+// init active dot on load
+updateActive();
+
+</script>
 </body>
 </html>

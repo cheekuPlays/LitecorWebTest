@@ -3,304 +3,268 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Litecor — Editor</title>
+<title>Litecor — Editor & Visual Storyteller</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ===== FONTS ===== */
-@font-face{
-  font-family:"PPReg";
-  src:url("PPEditorialNew-Regular.otf");
-}
-@font-face{
-  font-family:"PPBold";
-  src:url("PPEditorialNew-Ultrabold.otf");
-}
-@font-face{
-  font-family:"PPIt";
-  src:url("PPEditorialNew-Italic.otf");
-}
-
-/* ===== ROOT ===== */
 :root{
-  --bg:#070b14;
-  --panel:#0c1222;
-  --text:#eaf0ff;
-  --muted:rgba(234,240,255,0.7);
-  --accent:#5865F2;
-  --accent-soft:rgba(88,101,242,0.15);
+  --bg1:#071227;
+  --bg2:#082033;
+  --accent1:#00bcd4;
+  --accent2:#6a00ff;
+  --muted:rgba(234,252,255,0.78);
+  --glass:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.10);
 }
 
-/* ===== BASE ===== */
 *{box-sizing:border-box}
 html,body{
   margin:0;
-  font-family:PPReg,system-ui;
-  color:var(--text);
-  background:radial-gradient(1200px 600px at 20% 0%, #0e1633, #070b14);
+  padding:0;
+  height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:#eafcff;
 }
-section{
-  padding:120px 18px;
-}
-.container{
-  max-width:1100px;
-  margin:0 auto;
+body{
+  background:linear-gradient(120deg,var(--bg1),var(--bg2));
+  overflow-x:hidden;
 }
 
-/* ===== HERO ===== */
-.hero h1{
-  font-family:PPBold;
-  font-size:clamp(36px,5vw,64px);
-  margin:0 0 12px;
+/* hide scrollbar */
+html{scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
+
+/* ---------------- BACKGROUND ---------------- */
+.bg-wrap{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
 }
-.hero p{
-  max-width:520px;
-  color:var(--muted);
-  font-size:1.05rem;
+.bg-gradient{
+  position:absolute;
+  inset:-20%;
+  background:linear-gradient(45deg,#05101f,#071f33,#050b18);
+  filter:blur(28px);
+  animation:bgShift 22s linear infinite;
+}
+@keyframes bgShift{
+  0%{transform:translateX(-6%)}
+  50%{transform:translateX(6%)}
+  100%{transform:translateX(-6%)}
 }
 
-/* ===== OFFER GRID ===== */
-.offer-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:28px;
-  margin-top:60px;
-}
-.offer-card{
-  background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:22px;
-  padding:34px;
-  box-shadow:0 30px 70px rgba(0,0,0,0.6);
-  transition:transform .18s ease, box-shadow .18s ease;
-}
-.offer-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 40px 90px rgba(0,0,0,0.8);
-}
-.offer-card h2{
-  font-family:PPBold;
-  margin:0 0 10px;
-}
-.offer-card p{
-  color:var(--muted);
-  max-width:420px;
-}
-.offer-card .cta{
-  display:inline-block;
-  margin-top:18px;
-  padding:10px 18px;
-  border-radius:999px;
-  background:var(--accent);
-  color:white;
-  text-decoration:none;
-  font-weight:700;
-}
-
-/* ===== PORTFOLIO ===== */
-.portfolio-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:26px;
-  margin-top:28px;
-}
-.video-card{
-  border-radius:18px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,0.08);
-  box-shadow:0 24px 60px rgba(0,0,0,0.7);
-}
-iframe{
-  width:100%;
-  height:340px;
-  border:0;
-}
-
-/* ===== DISCORD SECTION ===== */
-.discord-section{
-  background:linear-gradient(180deg,rgba(88,101,242,0.08),rgba(7,11,20,0.9));
-  border-top:1px solid rgba(88,101,242,0.25);
-}
-.discord-card{
-  background:rgba(15,18,32,0.9);
-  border:1px solid rgba(88,101,242,0.25);
-  border-radius:28px;
-  padding:46px;
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:36px;
-  box-shadow:0 40px 120px rgba(0,0,0,0.8);
-}
-.discord-card h2{
-  font-family:PPBold;
-  font-size:clamp(28px,4vw,44px);
-}
-.discord-card p{
-  color:var(--muted);
-  max-width:420px;
-}
-
-/* profiles */
-.discord-people{
+/* ---------------- HEADER / NAV ---------------- */
+header{
+  position:fixed;
+  top:12px;
+  left:0;right:0;
+  z-index:50;
   display:flex;
-  gap:18px;
-  margin-top:20px;
+  justify-content:center;
+  pointer-events:none;
 }
-.person{
-  flex:1;
-  background:rgba(0,0,0,0.4);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:20px;
-  padding:18px;
-  text-align:center;
-}
-.avatar{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  margin:0 auto 10px;
-  background:radial-gradient(circle at 30% 30%, #fff, var(--accent));
-  box-shadow:0 0 24px rgba(88,101,242,0.6);
-}
-.name{
-  font-family:PPBold;
-}
-.role{
-  font-family:PPIt;
-  font-size:0.85rem;
-  color:var(--muted);
+.nav-inner{
+  width:min(1120px,calc(100% - 32px));
+  display:flex;
+  align-items:center;
+  gap:14px;
+  pointer-events:auto;
 }
 
-/* discord button */
-.discord-btn{
-  display:inline-block;
-  margin-top:24px;
-  padding:12px 22px;
-  border-radius:999px;
-  background:var(--accent);
-  color:white;
-  text-decoration:none;
+.logo{
   font-weight:700;
-  box-shadow:0 18px 50px rgba(88,101,242,0.6);
+  letter-spacing:0.08em;
+  font-size:16px;
+  animation:logoGlow 8s linear infinite;
+}
+@keyframes logoGlow{
+  0%{color:var(--accent1)}
+  50%{color:var(--accent2)}
+  100%{color:var(--accent1)}
 }
 
-/* ===== CONTACT ===== */
-.contact-box{
+nav{
+  margin-left:auto;
+  display:flex;
+  gap:10px;
+}
+nav a{
+  text-decoration:none;
+  color:#eafcff;
+  font-size:13px;
+  font-weight:600;
+  padding:7px 14px;
+  border-radius:999px;
   background:rgba(0,0,0,0.45);
   border:1px solid rgba(255,255,255,0.08);
-  border-radius:24px;
-  padding:36px;
-  max-width:520px;
+  backdrop-filter:blur(10px);
+  transition:transform .18s, background .18s;
 }
-.contact-box p{
-  color:var(--muted);
-}
-.contact-links a{
-  display:block;
-  margin-top:10px;
-  color:var(--accent);
-  text-decoration:none;
-  font-weight:700;
+nav a:hover{
+  transform:translateY(-2px);
+  background:rgba(0,0,0,0.65);
 }
 
-/* ===== RESPONSIVE ===== */
+/* ---------------- LAYOUT ---------------- */
+main{
+  position:relative;
+  z-index:10;
+}
+section{
+  min-height:100vh;
+  padding:120px 18px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.container{
+  width:min(1100px,96%);
+}
+
+/* ---------------- HERO ---------------- */
+.hero{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:40px;
+  align-items:center;
+}
+.hero h1{
+  margin:0 0 12px;
+  font-size:clamp(32px,5vw,56px);
+}
+.hero p{
+  color:var(--muted);
+  max-width:520px;
+}
+
+/* ---------------- PARALLAX CARD ---------------- */
+.card-zone{
+  position:relative;
+  height:360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.card-shadow{
+  position:absolute;
+  width:360px;
+  height:260px;
+  border-radius:24px;
+  background:radial-gradient(ellipse at center,rgba(0,60,90,.25),transparent);
+  filter:blur(36px);
+  transition:transform .12s,opacity .18s;
+}
+.card-interact{
+  position:absolute;
+  width:420px;
+  height:320px;
+}
+.center-card{
+  width:380px;
+  height:280px;
+  border-radius:20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  backdrop-filter:blur(14px);
+  box-shadow:0 28px 80px rgba(0,0,0,.7);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  cursor:pointer;
+  transition:transform .12s, box-shadow .18s;
+}
+.center-card h2{
+  margin:0 0 8px;
+  color:var(--accent1);
+}
+.center-card p{
+  color:var(--muted);
+  max-width:260px;
+}
+
+/* ---------------- MOBILE ---------------- */
 @media(max-width:900px){
-  .offer-grid,
-  .portfolio-grid,
-  .discord-card{
-    grid-template-columns:1fr;
-  }
-  iframe{height:260px}
+  .hero{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
-<section>
-  <div class="container hero">
-    <h1>Edits that keep people watching.</h1>
-    <p>Longform storytelling, short-form punch, and clips built for retention — not noise.</p>
+<div class="bg-wrap">
+  <div class="bg-gradient"></div>
+</div>
 
-    <div class="offer-grid">
-      <div class="offer-card">
-        <h2>Editing</h2>
-        <p>Longform and shortform edits focused on pacing, rhythm, and watch-time — not just flashy cuts.</p>
-        <a href="#portfolio" class="cta">View editing work</a>
-      </div>
-
-      <div class="offer-card">
-        <h2>Discord-first workflow</h2>
-        <p>Most projects start with a conversation. Ideas, references, feedback — all in real time.</p>
-        <a href="#discord" class="cta">Talk on Discord</a>
-      </div>
-    </div>
+<header>
+  <div class="nav-inner">
+    <div class="logo">LITECOR</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="editing.html">Editing</a>
+      <a href="discord.html">Discord</a>
+    </nav>
   </div>
-</section>
+</header>
 
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <div class="container">
-    <h2 style="font-family:PPBold;font-size:32px">Portfolio</h2>
-    <p style="color:var(--muted)">Editing and clipping samples.</p>
-
-    <div class="portfolio-grid">
-      <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/T4LQeFQnjWU" allowfullscreen></iframe>
-      </div>
-      <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/759NWZ98wFE" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DISCORD -->
-<section id="discord" class="discord-section">
-  <div class="container">
-    <div class="discord-card">
+<main>
+  <section id="home">
+    <div class="container hero">
       <div>
-        <h2>Let’s talk on Discord</h2>
+        <h1>Editor & Visual Storyteller</h1>
         <p>
-          No fixed pricing. No forms first.  
-          Just a quick chat about your content and what actually fits.
+          Clean pacing, sharp cuts, and edits designed for how people actually watch.
+          Longform, shorts, and clips — done properly.
         </p>
-        <a href="https://discord.com" class="discord-btn">Message on Discord</a>
       </div>
 
-      <div>
-        <div class="discord-people">
-          <div class="person">
-            <div class="avatar"></div>
-            <div class="name">Litecor</div>
-            <div class="role">Editor</div>
-          </div>
-          <div class="person">
-            <div class="avatar"></div>
-            <div class="name">Cheeku</div>
-            <div class="role">Dev / Creative</div>
+      <div class="card-zone">
+        <div class="card-shadow" id="cardShadow"></div>
+        <div class="card-interact" id="cardInteract">
+          <div class="center-card" id="centerCard">
+            <h2>Welcome to Litecor</h2>
+            <p>Scroll down. Or don’t. The cuts are still clean.</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- CONTACT -->
-<section>
-  <div class="container">
-    <div class="contact-box">
-      <h2 style="font-family:PPBold">Contact</h2>
-      <p>No fixed prices — email or DM to get a quote.</p>
+<script>
+/* -------- CARD PARALLAX -------- */
+const card = document.getElementById('centerCard');
+const zone = document.getElementById('cardInteract');
+const shadow = document.getElementById('cardShadow');
 
-      <div class="contact-links">
-        <a href="mailto:litecor@email.com">Email</a>
-        <a href="https://discord.com">Discord</a>
-        <a href="https://x.com">X (Twitter)</a>
-      </div>
-    </div>
-  </div>
-</section>
+let t={rx:0,ry:0,tx:0,ty:0}, a={...t};
+const max=12;
+
+zone.addEventListener('mousemove',e=>{
+  const r=card.getBoundingClientRect();
+  const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
+  const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
+  t.ry=Math.max(-max,Math.min(max,dx*max));
+  t.rx=Math.max(-max,Math.min(max,-dy*max));
+  t.tx=dx*18;
+  t.ty=dy*12;
+  shadow.style.transform=`translate(${-dx*20}px,${-dy*14}px)`;
+});
+zone.addEventListener('mouseleave',()=>t={rx:0,ry:0,tx:0,ty:0});
+
+(function loop(){
+  const e=.12;
+  for(let k in t) a[k]+= (t[k]-a[k])*e;
+  card.style.transform=`perspective(900px)
+    translate(${a.tx}px,${a.ty}px)
+    rotateX(${a.rx}deg)
+    rotateY(${a.ry}deg)`;
+  requestAnimationFrame(loop);
+})();
+</script>
 
 </body>
 </html>

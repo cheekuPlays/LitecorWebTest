@@ -1,267 +1,286 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Litecor — Editor & Visual Storyteller</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Litecor — Editor & Discord Community</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg1:#071227;
-  --bg2:#082033;
-  --accent1:#00bcd4;
-  --accent2:#6a00ff;
-  --muted:rgba(234,252,255,0.78);
-  --glass:rgba(255,255,255,0.04);
-  --border:rgba(255,255,255,0.10);
+  --bg1:#070b14;
+  --bg2:#0b1c2d;
+  --accent:#6cf3ff;
+  --accent2:#8a5cff;
+  --muted:rgba(235,245,255,.78);
 }
 
 *{box-sizing:border-box}
 html,body{
   margin:0;
-  padding:0;
-  height:100%;
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  color:#eafcff;
-}
-body{
+  font-family:Inter,system-ui,sans-serif;
+  color:#ecf7ff;
   background:linear-gradient(120deg,var(--bg1),var(--bg2));
   overflow-x:hidden;
 }
-
-/* hide scrollbar */
-html{scrollbar-width:none}
 html::-webkit-scrollbar{display:none}
 
-/* ---------------- BACKGROUND ---------------- */
-.bg-wrap{
+/* ---------- BACKGROUND ---------- */
+.bg{
   position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-}
-.bg-gradient{
-  position:absolute;
   inset:-20%;
-  background:linear-gradient(45deg,#05101f,#071f33,#050b18);
-  filter:blur(28px);
-  animation:bgShift 22s linear infinite;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(108,243,255,.15),transparent 45%),
+    radial-gradient(circle at 80% 60%,rgba(138,92,255,.18),transparent 50%);
+  filter:blur(40px);
+  animation:bgMove 24s ease-in-out infinite;
+  z-index:0;
 }
-@keyframes bgShift{
-  0%{transform:translateX(-6%)}
-  50%{transform:translateX(6%)}
-  100%{transform:translateX(-6%)}
+@keyframes bgMove{
+  0%,100%{transform:translate(0,0)}
+  50%{transform:translate(-4%,3%)}
 }
 
-/* ---------------- HEADER / NAV ---------------- */
+/* ---------- HEADER ---------- */
 header{
   position:fixed;
-  top:12px;
+  top:14px;
   left:0;right:0;
-  z-index:50;
   display:flex;
   justify-content:center;
-  pointer-events:none;
+  z-index:40;
 }
-.nav-inner{
-  width:min(1120px,calc(100% - 32px));
+.nav{
+  width:min(1100px,95%);
   display:flex;
   align-items:center;
-  gap:14px;
-  pointer-events:auto;
 }
-
 .logo{
   font-weight:700;
-  letter-spacing:0.08em;
-  font-size:16px;
-  animation:logoGlow 8s linear infinite;
+  letter-spacing:.12em;
+  animation:logoShift 8s linear infinite;
 }
-@keyframes logoGlow{
-  0%{color:var(--accent1)}
+@keyframes logoShift{
+  0%{color:var(--accent)}
   50%{color:var(--accent2)}
-  100%{color:var(--accent1)}
+  100%{color:var(--accent)}
 }
 
-nav{
-  margin-left:auto;
-  display:flex;
-  gap:10px;
+/* ---------- LITEIFY ---------- */
+.liteify{
+  position:fixed;
+  top:14px;
+  right:18px;
+  z-index:50;
 }
-nav a{
-  text-decoration:none;
-  color:#eafcff;
-  font-size:13px;
-  font-weight:600;
-  padding:7px 14px;
+.liteify-btn{
+  background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.1);
   border-radius:999px;
-  background:rgba(0,0,0,0.45);
-  border:1px solid rgba(255,255,255,0.08);
+  padding:7px 14px;
+  cursor:pointer;
   backdrop-filter:blur(10px);
-  transition:transform .18s, background .18s;
 }
-nav a:hover{
-  transform:translateY(-2px);
-  background:rgba(0,0,0,0.65);
+.liteify-panel{
+  margin-top:8px;
+  width:260px;
+  background:rgba(5,10,20,.92);
+  border-radius:16px;
+  padding:12px;
+  display:none;
 }
+.liteify.open .liteify-panel{display:block}
 
-/* ---------------- LAYOUT ---------------- */
+/* ---------- LAYOUT ---------- */
 main{
   position:relative;
-  z-index:10;
+  z-index:5;
 }
-section{
+.hero{
   min-height:100vh;
-  padding:120px 18px 80px;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-}
-.container{
-  width:min(1100px,96%);
-}
-
-/* ---------------- HERO ---------------- */
-.hero{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:40px;
-  align-items:center;
+  padding:140px 20px 80px;
+  text-align:center;
 }
 .hero h1{
-  margin:0 0 12px;
-  font-size:clamp(32px,5vw,56px);
+  font-size:clamp(34px,5vw,58px);
+  margin:0 0 14px;
 }
 .hero p{
+  max-width:600px;
   color:var(--muted);
-  max-width:520px;
 }
 
-/* ---------------- PARALLAX CARD ---------------- */
-.card-zone{
+/* ---------- BIG SELECTION CARDS ---------- */
+.selection{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:26px;
+  width:min(900px,100%);
+}
+@media(max-width:800px){
+  .selection{grid-template-columns:1fr}
+}
+
+.card-wrap{
   position:relative;
-  height:360px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  height:260px;
 }
 .card-shadow{
   position:absolute;
-  width:360px;
-  height:260px;
-  border-radius:24px;
-  background:radial-gradient(ellipse at center,rgba(0,60,90,.25),transparent);
-  filter:blur(36px);
-  transition:transform .12s,opacity .18s;
+  inset:20px;
+  border-radius:26px;
+  background:radial-gradient(ellipse at center,rgba(108,243,255,.25),transparent);
+  filter:blur(40px);
 }
-.card-interact{
-  position:absolute;
-  width:420px;
-  height:320px;
-}
-.center-card{
-  width:380px;
-  height:280px;
-  border-radius:20px;
-  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-  border:1px solid var(--border);
+.card{
+  height:100%;
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.12);
   backdrop-filter:blur(14px);
-  box-shadow:0 28px 80px rgba(0,0,0,.7);
+  box-shadow:0 30px 80px rgba(0,0,0,.8);
   display:flex;
   flex-direction:column;
-  justify-content:center;
   align-items:center;
-  text-align:center;
+  justify-content:center;
   cursor:pointer;
-  transition:transform .12s, box-shadow .18s;
+  transition:transform .12s;
 }
-.center-card h2{
+.card h2{
   margin:0 0 8px;
-  color:var(--accent1);
+  font-size:1.6rem;
+  color:var(--accent);
 }
-.center-card p{
+.card p{
   color:var(--muted);
   max-width:260px;
 }
 
-/* ---------------- MOBILE ---------------- */
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr}
+/* ---------- CURSOR TRAIL ---------- */
+.trail span{
+  position:fixed;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+
+/* ---------- FOOT ---------- */
+footer{
+  padding:40px 0;
+  text-align:center;
+  color:rgba(255,255,255,.4);
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg-wrap">
-  <div class="bg-gradient"></div>
-</div>
+<div class="bg"></div>
 
 <header>
-  <div class="nav-inner">
+  <div class="nav">
     <div class="logo">LITECOR</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="editing.html">Editing</a>
-      <a href="discord.html">Discord</a>
-    </nav>
   </div>
 </header>
 
+<!-- Liteify -->
+<div class="liteify" id="liteify">
+  <div class="liteify-btn">Liteify ♪</div>
+  <div class="liteify-panel">
+    <audio id="audio"></audio>
+    <div style="font-size:13px;margin-bottom:8px">Background music</div>
+    <button onclick="prev()">⏮</button>
+    <button onclick="toggle()">▶</button>
+    <button onclick="next()">⏭</button>
+  </div>
+</div>
+
 <main>
-  <section id="home">
-    <div class="container hero">
-      <div>
-        <h1>Editor & Visual Storyteller</h1>
-        <p>
-          Clean pacing, sharp cuts, and edits designed for how people actually watch.
-          Longform, shorts, and clips — done properly.
-        </p>
+  <section class="hero">
+    <h1>Editor & Community Builder</h1>
+    <p>
+      Clean edits, strong pacing, and a Discord space built for creators.
+      Pick where you want to go.
+    </p>
+
+    <div class="selection">
+      <div class="card-wrap" data-link="editing.html">
+        <div class="card-shadow"></div>
+        <div class="card">
+          <h2>Editing</h2>
+          <p>Longform, short-form, clipping, and visual storytelling.</p>
+        </div>
       </div>
 
-      <div class="card-zone">
-        <div class="card-shadow" id="cardShadow"></div>
-        <div class="card-interact" id="cardInteract">
-          <div class="center-card" id="centerCard">
-            <h2>Welcome to Litecor</h2>
-            <p>Scroll down. Or don’t. The cuts are still clean.</p>
-          </div>
+      <div class="card-wrap" data-link="discord.html">
+        <div class="card-shadow"></div>
+        <div class="card">
+          <h2>Discord</h2>
+          <p>Community, collabs, feedback, and chill sessions.</p>
         </div>
       </div>
     </div>
   </section>
 </main>
 
+<footer>
+  © Litecor
+</footer>
+
+<!-- Cursor trail -->
+<div class="trail" id="trail"></div>
+
 <script>
-/* -------- CARD PARALLAX -------- */
-const card = document.getElementById('centerCard');
-const zone = document.getElementById('cardInteract');
-const shadow = document.getElementById('cardShadow');
-
-let t={rx:0,ry:0,tx:0,ty:0}, a={...t};
-const max=12;
-
-zone.addEventListener('mousemove',e=>{
-  const r=card.getBoundingClientRect();
-  const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-  const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-  t.ry=Math.max(-max,Math.min(max,dx*max));
-  t.rx=Math.max(-max,Math.min(max,-dy*max));
-  t.tx=dx*18;
-  t.ty=dy*12;
-  shadow.style.transform=`translate(${-dx*20}px,${-dy*14}px)`;
+/* ---------- CARD PARALLAX ---------- */
+document.querySelectorAll('.card-wrap').forEach(wrap=>{
+  const card=wrap.querySelector('.card');
+  wrap.addEventListener('mousemove',e=>{
+    const r=wrap.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(900px) rotateX(${-y*12}deg) rotateY(${x*12}deg)`;
+  });
+  wrap.addEventListener('mouseleave',()=>card.style.transform='');
+  wrap.addEventListener('click',()=>location.href=wrap.dataset.link);
 });
-zone.addEventListener('mouseleave',()=>t={rx:0,ry:0,tx:0,ty:0});
 
+/* ---------- LITEIFY ---------- */
+const liteify=document.getElementById('liteify');
+const audio=document.getElementById('audio');
+const songs=['song1.mp3','song2.mp3','song3.mp3'];
+let idx=Math.floor(Math.random()*songs.length);
+audio.src=songs[idx];
+
+function toggle(){audio.paused?audio.play():audio.pause()}
+function next(){idx=(idx+1)%songs.length;audio.src=songs[idx];audio.play()}
+function prev(){idx=(idx-1+songs.length)%songs.length;audio.src=songs[idx];audio.play()}
+liteify.querySelector('.liteify-btn').onclick=()=>liteify.classList.toggle('open');
+
+/* ---------- CURSOR TRAIL ---------- */
+const trail=document.getElementById('trail');
+const dots=[...Array(10)].map(()=>{
+  const s=document.createElement('span');
+  trail.appendChild(s);
+  return{s,x:-999,y:-999};
+});
+let mx=0,my=0;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function loop(){
-  const e=.12;
-  for(let k in t) a[k]+= (t[k]-a[k])*e;
-  card.style.transform=`perspective(900px)
-    translate(${a.tx}px,${a.ty}px)
-    rotateX(${a.rx}deg)
-    rotateY(${a.ry}deg)`;
+  let x=mx,y=my;
+  dots.forEach((d,i)=>{
+    d.x+=(x-d.x)*.25;
+    d.y+=(y-d.y)*.25;
+    d.s.style.transform=`translate(${d.x}px,${d.y}px)`;
+    x=d.x;y=d.y;
+  });
   requestAnimationFrame(loop);
 })();
 </script>

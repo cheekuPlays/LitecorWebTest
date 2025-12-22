@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Litecor — Editing</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#070b14;
+  --bg2:#0b1c2d;
+  --accent:#6cf3ff;
+  --accent2:#8a5cff;
+  --muted:rgba(235,245,255,.78);
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  font-family:Inter,system-ui,sans-serif;
+  color:#ecf7ff;
+  background:linear-gradient(120deg,var(--bg1),var(--bg2));
+  overflow-x:hidden;
+}
+html::-webkit-scrollbar{display:none}
+
+/* ---------- BACKGROUND ---------- */
+.bg{
+  position:fixed;
+  inset:-25%;
+  background:
+    radial-gradient(circle at 25% 30%,rgba(108,243,255,.18),transparent 45%),
+    radial-gradient(circle at 75% 60%,rgba(138,92,255,.22),transparent 50%);
+  filter:blur(50px);
+  z-index:0;
+  transition:transform .25s linear;
+}
+
+/* ---------- HEADER ---------- */
+header{
+  position:fixed;
+  top:14px;
+  left:0;right:0;
+  display:flex;
+  justify-content:center;
+  z-index:40;
+}
+.nav{
+  width:min(1100px,95%);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{
+  font-weight:700;
+  letter-spacing:.14em;
+  animation:logoShift 10s linear infinite;
+  cursor:pointer;
+}
+@keyframes logoShift{
+  0%{color:var(--accent)}
+  50%{color:var(--accent2)}
+  100%{color:var(--accent)}
+}
+.back{
+  font-size:13px;
+  opacity:.8;
+  cursor:pointer;
+}
+.back:hover{opacity:1}
+
+/* ---------- MAIN ---------- */
+main{
+  position:relative;
+  z-index:5;
+  padding-top:140px;
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  text-align:center;
+  padding:0 20px 80px;
+}
+.hero h1{
+  font-size:clamp(34px,5vw,56px);
+  margin:0 0 14px;
+}
+.hero p{
+  max-width:620px;
+  margin:0 auto;
+  color:var(--muted);
+}
+
+/* ---------- SERVICE CARDS ---------- */
+.services{
+  width:min(1100px,92%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:26px;
+}
+@media(max-width:900px){
+  .services{grid-template-columns:1fr}
+}
+
+.card-wrap{
+  position:relative;
+  height:240px;
+  perspective:1200px;
+}
+.card-shadow{
+  position:absolute;
+  inset:24px;
+  border-radius:26px;
+  background:radial-gradient(ellipse at center,rgba(108,243,255,.35),transparent 60%);
+  filter:blur(46px);
+  opacity:.8;
+  transition:transform .18s,opacity .18s;
+}
+.card{
+  height:100%;
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(16px);
+  box-shadow:0 34px 90px rgba(0,0,0,.85);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  text-align:center;
+  transform-style:preserve-3d;
+  transition:transform .14s;
+}
+.card h3{
+  margin:0 0 8px;
+  color:var(--accent);
+}
+.card p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* ---------- PORTFOLIO ---------- */
+.portfolio{
+  width:min(1100px,92%);
+  margin:100px auto 0;
+}
+.portfolio h2{
+  text-align:center;
+  margin-bottom:26px;
+}
+.videos{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:26px;
+}
+@media(max-width:900px){
+  .videos{grid-template-columns:1fr}
+}
+.video-card{
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 28px 80px rgba(0,0,0,.75);
+}
+.video-card iframe{
+  width:100%;
+  height:340px;
+  border:0;
+}
+
+/* ---------- FOOTER ---------- */
+footer{
+  margin:100px 0 40px;
+  text-align:center;
+  color:rgba(255,255,255,.4);
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg" id="bg"></div>
+
+<header>
+  <div class="nav">
+    <div class="logo" onclick="location.href='index.html'">LITECOR</div>
+    <div class="back" onclick="location.href='index.html'">← Back</div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Editing Services</h1>
+    <p>
+      Fast pacing, clean cuts, and edits built around how people actually watch.
+      No templates. No lazy timelines.
+    </p>
+  </section>
+
+  <section class="services">
+    <div class="card-wrap">
+      <div class="card-shadow"></div>
+      <div class="card">
+        <h3>Longform Editing</h3>
+        <p>Story-driven edits, clean flow, and pacing that keeps retention high.</p>
+      </div>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-shadow"></div>
+      <div class="card">
+        <h3>Shorts & Reels</h3>
+        <p>Scroll-stopping cuts, captions, and rhythm tuned for fast platforms.</p>
+      </div>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-shadow"></div>
+      <div class="card">
+        <h3>Clipping</h3>
+        <p>High-impact moments extracted and optimized for growth.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <h2>Samples</h2>
+    <div class="videos">
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/T4LQeFQnjWU" allowfullscreen></iframe>
+      </div>
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/759NWZ98wFE" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  No fixed pricing — reach out for a custom quote.
+</footer>
+
+<script>
+/* ---------- PARALLAX ---------- */
+document.querySelectorAll('.card-wrap').forEach(wrap=>{
+  const card=wrap.querySelector('.card');
+  const shadow=wrap.querySelector('.card-shadow');
+
+  wrap.addEventListener('mousemove',e=>{
+    const r=wrap.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+
+    const rx=-y*20;
+    const ry=x*20;
+    const tx=x*22;
+    const ty=y*16;
+
+    card.style.transform=
+      `translate3d(${tx}px,${ty}px,0)
+       rotateX(${rx}deg)
+       rotateY(${ry}deg)
+       scale(1.05)`;
+
+    shadow.style.transform=`translate(${-x*30}px,${-y*22}px)`;
+    shadow.style.opacity=1;
+  });
+
+  wrap.addEventListener('mouseleave',()=>{
+    card.style.transform='';
+    shadow.style.opacity=.8;
+  });
+});
+
+/* ---------- BACKGROUND DRIFT ---------- */
+const bg=document.getElementById('bg');
+window.addEventListener('mousemove',e=>{
+  const x=(e.clientX/window.innerWidth-.5)*16;
+  const y=(e.clientY/window.innerHeight-.5)*16;
+  bg.style.transform=`translate(${x}px,${y}px)`;
+});
+</script>
+
+</body>
+</html>

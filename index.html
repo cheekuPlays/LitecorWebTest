@@ -3,359 +3,220 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Litecor — Home</title>
+<title>Litecor — Editing that feels right</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg1:#060912;
-  --bg2:#0b1d2f;
-  --accent:#6cf3ff;
-  --accent2:#8a5cff;
-  --muted:rgba(235,245,255,.78);
+  --bg:#050b18;
+  --glass:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.12);
+  --accent1:#00bcd4;
+  --accent2:#6a00ff;
+  --text:#eafcff;
 }
+
 *{box-sizing:border-box}
-html,body{
-  margin:0;
-  font-family:Inter,system-ui,sans-serif;
-  color:#ecf7ff;
-  background:linear-gradient(120deg,var(--bg1),var(--bg2));
-  overflow-x:hidden;
-}
-html::-webkit-scrollbar{display:none}
+html,body{margin:0;height:100%;font-family:Inter;background:var(--bg);color:var(--text);overflow-x:hidden}
 
-/* ================= BG ================= */
+/* ===== background ===== */
 .bg{
-  position:fixed;
-  inset:-30%;
+  position:fixed;inset:0;z-index:-1;
   background:
-    radial-gradient(circle at 20% 30%,rgba(108,243,255,.22),transparent 45%),
-    radial-gradient(circle at 75% 65%,rgba(138,92,255,.22),transparent 50%);
-  filter:blur(60px);
-  z-index:0;
-  transition:transform .25s linear;
+    radial-gradient(circle at 20% 30%, rgba(0,188,212,.25), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(106,0,255,.25), transparent 45%);
+  filter:blur(40px);
+  animation:floatBG 20s linear infinite;
+}
+@keyframes floatBG{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-40px)}
+  100%{transform:translateY(0)}
 }
 
-/* ================= HEADER ================= */
+/* ===== header ===== */
 header{
-  position:fixed;
-  top:14px;
-  left:0;right:0;
-  display:flex;
-  justify-content:center;
-  z-index:60;
+  position:fixed;top:14px;left:0;right:0;z-index:50;
+  display:flex;justify-content:center;
 }
-.nav{
-  width:min(1200px,96%);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.header-inner{
+  width:1100px;max-width:95%;
+  display:flex;align-items:center;gap:18px;
 }
 .logo{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  cursor:pointer;
-  margin-left:-24px; /* ⬅ moved more left */
+  display:flex;align-items:center;gap:10px;
 }
 .logo video{
-  width:56px;height:56px;
-  border-radius:14px;
-  object-fit:cover;
-  box-shadow:0 14px 40px rgba(0,0,0,.7);
+  width:52px;height:52px;border-radius:14px;
 }
 .logo span{
-  font-weight:700;
-  letter-spacing:.18em;
-  animation:logoShift 10s linear infinite;
+  font-weight:700;letter-spacing:.15em;
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;color:transparent;
 }
-@keyframes logoShift{
-  0%{color:var(--accent)}
-  50%{color:var(--accent2)}
-  100%{color:var(--accent)}
-}
-nav{
-  display:flex;
-  gap:10px;
-}
+nav{margin-left:auto;display:flex;gap:10px}
 nav a{
-  font-size:13px;
-  padding:7px 14px;
-  border-radius:999px;
-  background:rgba(0,0,0,.45);
-  border:1px solid rgba(255,255,255,.08);
-  color:#eafcff;
-  text-decoration:none;
-  transition:.18s;
+  text-decoration:none;color:var(--text);
+  padding:7px 14px;border-radius:999px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  transition:.2s;
 }
 nav a:hover{transform:translateY(-2px)}
 
-/* ================= LITEIFY ================= */
+/* ===== Liteify ===== */
 .liteify{
-  position:fixed;
-  top:18px;
-  right:18px;
-  z-index:80;
+  position:fixed;top:16px;right:16px;z-index:60;
 }
-.liteify-toggle{
-  padding:7px 14px;
-  border-radius:999px;
-  background:rgba(0,0,0,.55);
-  border:1px solid rgba(255,255,255,.12);
-  cursor:pointer;
+.liteify-btn{
+  padding:8px 14px;border-radius:999px;
+  background:var(--glass);
+  border:1px solid var(--border);
   backdrop-filter:blur(14px);
+  cursor:pointer;
 }
 .liteify-panel{
   margin-top:10px;
   width:260px;
-  padding:14px;
+  background:rgba(5,10,20,.75);
+  border:1px solid var(--border);
   border-radius:18px;
-  background:rgba(6,10,22,.85);
-  backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 30px 80px rgba(0,0,0,.85);
-  opacity:0;
-  transform:translateY(-8px) scale(.96);
-  pointer-events:none;
-  transition:.22s;
+  backdrop-filter:blur(16px);
+  padding:14px;
+  display:none;
 }
-.liteify-panel.open{
-  opacity:1;
-  transform:none;
-  pointer-events:auto;
+.liteify-panel.open{display:block}
+
+/* ===== cursor trail ===== */
+.trail{
+  position:fixed;pointer-events:none;z-index:100;
 }
-/* kill cursor effects INSIDE panel */
-.liteify-panel *{
-  cursor:auto;
+.dot{
+  position:absolute;width:6px;height:6px;border-radius:50%;
+  background:var(--accent1);opacity:.8;
 }
 
-/* ================= MAIN ================= */
-main{
-  position:relative;
-  z-index:5;
-  padding-top:160px;
-}
+/* ===== hero ===== */
+main{padding-top:140px}
 .hero{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
+  max-width:1100px;margin:auto;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:40px;
 }
-.hero-inner{
-  max-width:860px;
+.hero h1{
+  font-size:52px;line-height:1.05;margin:0;
 }
-
-/* typing heading */
-.type-wrap{
-  font-size:clamp(36px,5vw,56px);
-  font-weight:700;
-  display:inline-flex;
-  align-items:center;
-}
-.cursor{
-  width:10px;
-  height:1.1em;
-  background:var(--accent);
-  margin-left:6px;
-  animation:blink 1s steps(1) infinite;
+.type-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:#fff;margin-left:4px;
+  animation:blink 1s infinite;
 }
 @keyframes blink{50%{opacity:0}}
 
-/* yap text */
-.hero p{
-  margin:18px auto 0;
-  max-width:640px;
-  color:var(--muted);
-  font-size:1.05rem;
-  line-height:1.55;
-}
+.hero p{max-width:520px;color:rgba(234,252,255,.8)}
 
-/* scroll hint */
+/* ===== choice cards ===== */
+.choice-wrap{
+  display:flex;gap:28px;margin-top:40px;
+}
+.choice{
+  flex:1;
+  height:240px;
+  border-radius:22px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(18px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;
+  cursor:pointer;
+  transition:.25s;
+}
+.choice:hover{transform:translateY(-8px) scale(1.02)}
+
 .scroll-hint{
-  margin-top:48px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-  opacity:.85;
+  margin-top:30px;font-size:14px;opacity:.7;
+  animation:float 1.6s infinite;
 }
-.scroll-hint span{
-  font-size:12px;
-  color:var(--muted);
-}
-.arrow{
-  width:18px;height:18px;
-  border-left:2px solid var(--accent);
-  border-bottom:2px solid var(--accent);
-  transform:rotate(-45deg);
-  animation:bounce 1.6s infinite;
-}
-@keyframes bounce{
-  0%,100%{transform:translateY(0) rotate(-45deg)}
-  50%{transform:translateY(8px) rotate(-45deg)}
-}
-
-/* ================= SECTIONS ================= */
-.section{
-  min-height:90vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.section-inner{
-  text-align:center;
-}
-.section h2{
-  font-size:2.2rem;
-  margin-bottom:10px;
-}
-.section p{
-  color:var(--muted);
-  max-width:560px;
-  margin:0 auto 26px;
-}
-.section a{
-  display:inline-block;
-  padding:10px 22px;
-  border-radius:999px;
-  background:linear-gradient(120deg,var(--accent),var(--accent2));
-  color:#021018;
-  font-weight:700;
-  text-decoration:none;
-}
-
-/* ================= CURSOR TRAIL ================= */
-.trail{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:70;
-}
-.dot{
-  position:absolute;
-  width:6px;height:6px;
-  border-radius:50%;
-  background:rgba(108,243,255,.9);
-  mix-blend-mode:screen;
+@keyframes float{
+  50%{transform:translateY(6px)}
 }
 </style>
 </head>
 
 <body>
-
-<div class="bg" id="bg"></div>
+<div class="bg"></div>
 
 <header>
-  <div class="nav">
-    <div class="logo" onclick="location.href='index.html'">
-      <video src="LitecorLogo.mp4" autoplay muted loop playsinline></video>
+  <div class="header-inner">
+    <div class="logo">
+      <video src="LitecorLogo.mp4" autoplay loop muted></video>
       <span>LITECOR</span>
     </div>
     <nav>
+      <a href="index.html">Home</a>
       <a href="editing.html">Editing</a>
       <a href="discord.html">Discord</a>
     </nav>
   </div>
 </header>
 
-<!-- Liteify -->
 <div class="liteify">
-  <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
+  <div class="liteify-btn" id="liteifyBtn">Liteify ♪</div>
   <div class="liteify-panel" id="liteifyPanel">
-    <strong>Liteify</strong>
-    <p style="font-size:12px;color:var(--muted)">Background music player</p>
+    <p style="margin:0;font-size:13px">Background music</p>
+    <audio controls style="width:100%">
+      <source src="song1.mp3">
+    </audio>
   </div>
 </div>
 
 <main>
-  <!-- HERO -->
   <section class="hero">
-    <div class="hero-inner">
-      <div class="type-wrap">
-        <span id="typed"></span><span class="cursor"></span>
-      </div>
+    <div>
+      <h1>
+        Editing that feels right<span class="type-cursor"></span>
+      </h1>
       <p>
-        Editing isn’t just about cutting clips together. It’s about pacing,
-        rhythm, restraint, and knowing when to let a moment breathe.
-        Litecor focuses on edits that feel natural — the kind viewers stay for
-        without realizing why.
+        Clean pacing. Sharp cuts. Rhythm that matches how people actually watch.
+        No fixed prices. Just good work and honest quotes.
       </p>
 
-      <div class="scroll-hint">
-        <span>Scroll to explore</span>
-        <div class="arrow"></div>
+      <div class="choice-wrap">
+        <a class="choice" href="editing.html">Editing</a>
+        <a class="choice" href="discord.html">Discord</a>
       </div>
-    </div>
-  </section>
 
-  <!-- EDITING -->
-  <section class="section">
-    <div class="section-inner">
-      <h2>Editing</h2>
-      <p>Longform storytelling, shorts, and clean clips built for retention.</p>
-      <a href="editing.html">View editing</a>
-    </div>
-  </section>
-
-  <!-- DISCORD -->
-  <section class="section">
-    <div class="section-inner">
-      <h2>Discord</h2>
-      <p>Feedback, workflow talk, and hanging out while renders finish.</p>
-      <a href="discord.html">Join Discord</a>
+      <div class="scroll-hint">↓ scroll or choose a path</div>
     </div>
   </section>
 </main>
 
-<div class="trail" id="trail"></div>
-
 <script>
-/* bg parallax */
-const bg=document.getElementById('bg');
-window.addEventListener('mousemove',e=>{
-  bg.style.transform=`translate(${(e.clientX/window.innerWidth-.5)*20}px,${(e.clientY/window.innerHeight-.5)*20}px)`;
-});
-
-/* typing effect */
-const text="Editing that feels right";
-let i=0;
-const el=document.getElementById('typed');
-(function type(){
-  if(i<=text.length){
-    el.textContent=text.slice(0,i++);
-    setTimeout(type,70);
-  }
-})();
-
-/* Liteify toggle */
-const t=document.getElementById('liteifyToggle');
-const p=document.getElementById('liteifyPanel');
-t.onclick=()=>p.classList.toggle('open');
+/* liteify toggle */
+liteifyBtn.onclick=()=>liteifyPanel.classList.toggle("open")
 
 /* cursor trail */
-const trail=document.getElementById('trail');
-const dots=[];
+const trail=document.createElement("div");
+trail.className="trail";document.body.appendChild(trail);
+let dots=[];
 for(let i=0;i<10;i++){
-  const d=document.createElement('div');
-  d.className='dot';
-  trail.appendChild(d);
-  dots.push({el:d,x:-999,y:-999});
+  const d=document.createElement("div");
+  d.className="dot";trail.appendChild(d);
+  dots.push({el:d,x:0,y:0});
 }
-let mx=0,my=0;
-window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+window.addEventListener("mousemove",e=>{
+  dots[0].x=e.clientX;dots[0].y=e.clientY;
+});
 (function loop(){
-  let x=mx,y=my;
-  dots.forEach((p,i)=>{
-    p.x+=(x-p.x)*(0.3-i*0.02);
-    p.y+=(y-p.y)*(0.3-i*0.02);
-    p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
-    x=p.x;y=p.y;
-  });
+  for(let i=dots.length-1;i>0;i--){
+    dots[i].x+=(dots[i-1].x-dots[i].x)*.35;
+    dots[i].y+=(dots[i-1].y-dots[i].y)*.35;
+  }
+  dots.forEach(d=>d.el.style.transform=`translate(${d.x}px,${d.y}px)`);
   requestAnimationFrame(loop);
 })();
 </script>
-
 </body>
 </html>

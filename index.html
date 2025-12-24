@@ -1,196 +1,256 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Litecor</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Litecor — Home</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg1:#070b16;
-  --bg2:#0b1a2e;
-  --accent:#6ae3ff;
-  --accent2:#9d7bff;
-  --glass:rgba(255,255,255,0.06);
-  --border:rgba(255,255,255,0.12);
-  --text:#eafcff;
+  --bg1:#060912;
+  --bg2:#0b1d2f;
+  --accent:#6cf3ff;
+  --accent2:#8a5cff;
+  --muted:rgba(235,245,255,.78);
 }
-
 *{box-sizing:border-box}
 html,body{
-  margin:0;height:100%;
+  margin:0;
   font-family:Inter,system-ui,sans-serif;
+  color:#ecf7ff;
   background:linear-gradient(120deg,var(--bg1),var(--bg2));
-  color:var(--text);
   overflow-x:hidden;
 }
+html::-webkit-scrollbar{display:none}
 
-/* ---------- BACKGROUND ---------- */
+/* ================= BG ================= */
 .bg{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-}
-.bg::before{
-  content:"";
-  position:absolute;inset:-30%;
+  position:fixed;
+  inset:-30%;
   background:
-    radial-gradient(circle at 20% 30%, rgba(106,227,255,.18), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(157,123,255,.18), transparent 45%);
-  filter:blur(80px);
-  animation:bgMove 20s ease-in-out infinite;
-}
-@keyframes bgMove{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(30px)}
-  100%{transform:translateY(0)}
+    radial-gradient(circle at 20% 30%,rgba(108,243,255,.22),transparent 45%),
+    radial-gradient(circle at 75% 65%,rgba(138,92,255,.22),transparent 50%);
+  filter:blur(60px);
+  z-index:0;
+  transition:transform .25s linear;
 }
 
-/* ---------- CURSOR ---------- */
-.cursor{
-  position:fixed;left:0;top:0;width:14px;height:14px;
-  border-radius:50%;
-  background:var(--accent);
-  pointer-events:none;
-  transform:translate(-50%,-50%);
-  z-index:999;
-  box-shadow:0 0 20px rgba(106,227,255,.6);
-}
-.cursor-trail{
-  position:fixed;left:0;top:0;width:40px;height:40px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(106,227,255,.25),transparent 60%);
-  pointer-events:none;
-  transform:translate(-50%,-50%);
-  z-index:998;
-}
-
-/* ---------- HEADER ---------- */
+/* ================= HEADER ================= */
 header{
-  position:fixed;top:16px;left:0;right:0;
-  display:flex;justify-content:center;
-  z-index:50;
+  position:fixed;
+  top:14px;
+  left:0;right:0;
+  display:flex;
+  justify-content:center;
+  z-index:60;
 }
-.header-inner{
-  width:min(1200px,calc(100% - 40px));
-  display:flex;align-items:center;justify-content:space-between;
+.nav{
+  width:min(1200px,96%);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 .logo{
-  display:flex;align-items:center;gap:10px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  margin-left:-24px; /* ⬅ moved more left */
 }
 .logo video{
-  width:48px;height:48px;border-radius:12px;
+  width:56px;height:56px;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 14px 40px rgba(0,0,0,.7);
 }
 .logo span{
-  font-weight:700;letter-spacing:.08em;
-  color:var(--accent);
+  font-weight:700;
+  letter-spacing:.18em;
+  animation:logoShift 10s linear infinite;
 }
-
-/* ---------- NAV ---------- */
+@keyframes logoShift{
+  0%{color:var(--accent)}
+  50%{color:var(--accent2)}
+  100%{color:var(--accent)}
+}
 nav{
-  display:flex;gap:10px;
+  display:flex;
+  gap:10px;
 }
 nav a{
-  text-decoration:none;
-  color:var(--text);
-  padding:8px 14px;
+  font-size:13px;
+  padding:7px 14px;
   border-radius:999px;
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(14px);
-  transition:.2s;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.08);
+  color:#eafcff;
+  text-decoration:none;
+  transition:.18s;
 }
 nav a:hover{transform:translateY(-2px)}
 
-/* ---------- LITEIFY ---------- */
+/* ================= LITEIFY ================= */
 .liteify{
-  position:fixed;top:18px;right:18px;z-index:60;
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:80;
 }
-.liteify-btn{
-  padding:8px 14px;
+.liteify-toggle{
+  padding:7px 14px;
   border-radius:999px;
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(16px);
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.12);
   cursor:pointer;
+  backdrop-filter:blur(14px);
 }
 .liteify-panel{
-  position:absolute;top:44px;right:0;
-  width:260px;padding:14px;
+  margin-top:10px;
+  width:260px;
+  padding:14px;
   border-radius:18px;
-  background:rgba(6,10,20,.85);
-  border:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  opacity:0;pointer-events:none;
-  transform:translateY(-10px) scale(.95);
-  transition:.25s;
+  background:rgba(6,10,22,.85);
+  backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 80px rgba(0,0,0,.85);
+  opacity:0;
+  transform:translateY(-8px) scale(.96);
+  pointer-events:none;
+  transition:.22s;
 }
 .liteify-panel.open{
-  opacity:1;pointer-events:auto;
+  opacity:1;
   transform:none;
+  pointer-events:auto;
 }
-.liteify-panel h4{margin:0 0 6px}
+/* kill cursor effects INSIDE panel */
+.liteify-panel *{
+  cursor:auto;
+}
 
-/* ---------- HERO ---------- */
-main{position:relative;z-index:10}
-section{min-height:100vh;display:flex;align-items:center}
+/* ================= MAIN ================= */
+main{
+  position:relative;
+  z-index:5;
+  padding-top:160px;
+}
 .hero{
-  width:min(1200px,92%);
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:40px;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
 }
-.hero h1{
-  font-size:clamp(32px,5vw,56px);
+.hero-inner{
+  max-width:860px;
 }
-.hero p{opacity:.8}
 
-/* ---------- CENTER SELECTION ---------- */
-.select{
-  margin-top:40px;
-  display:flex;gap:24px;
+/* typing heading */
+.type-wrap{
+  font-size:clamp(36px,5vw,56px);
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
 }
-.card{
-  flex:1;
-  padding:30px;
-  border-radius:22px;
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  cursor:pointer;
-  transition:.25s;
+.cursor{
+  width:10px;
+  height:1.1em;
+  background:var(--accent);
+  margin-left:6px;
+  animation:blink 1s steps(1) infinite;
 }
-.card:hover{
-  transform:translateY(-6px) scale(1.02);
-}
-.card h3{margin:0}
+@keyframes blink{50%{opacity:0}}
 
-/* ---------- SCROLL ARROW ---------- */
+/* yap text */
+.hero p{
+  margin:18px auto 0;
+  max-width:640px;
+  color:var(--muted);
+  font-size:1.05rem;
+  line-height:1.55;
+}
+
+/* scroll hint */
 .scroll-hint{
-  position:absolute;bottom:40px;left:50%;
-  transform:translateX(-50%);
+  margin-top:48px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  opacity:.85;
+}
+.scroll-hint span{
+  font-size:12px;
+  color:var(--muted);
+}
+.arrow{
+  width:18px;height:18px;
+  border-left:2px solid var(--accent);
+  border-bottom:2px solid var(--accent);
+  transform:rotate(-45deg);
   animation:bounce 1.6s infinite;
-  opacity:.6;
 }
 @keyframes bounce{
-  0%,100%{transform:translate(-50%,0)}
-  50%{transform:translate(-50%,10px)}
+  0%,100%{transform:translateY(0) rotate(-45deg)}
+  50%{transform:translateY(8px) rotate(-45deg)}
 }
 
-/* ---------- JS HELPERS ---------- */
+/* ================= SECTIONS ================= */
+.section{
+  min-height:90vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.section-inner{
+  text-align:center;
+}
+.section h2{
+  font-size:2.2rem;
+  margin-bottom:10px;
+}
+.section p{
+  color:var(--muted);
+  max-width:560px;
+  margin:0 auto 26px;
+}
+.section a{
+  display:inline-block;
+  padding:10px 22px;
+  border-radius:999px;
+  background:linear-gradient(120deg,var(--accent),var(--accent2));
+  color:#021018;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* ================= CURSOR TRAIL ================= */
+.trail{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:70;
+}
+.dot{
+  position:absolute;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:rgba(108,243,255,.9);
+  mix-blend-mode:screen;
+}
 </style>
 </head>
+
 <body>
 
-<div class="bg"></div>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-trail" id="trail"></div>
+<div class="bg" id="bg"></div>
 
 <header>
-  <div class="header-inner">
-    <div class="logo">
-      <video src="LitecorLogo.mp4" autoplay muted loop></video>
+  <div class="nav">
+    <div class="logo" onclick="location.href='index.html'">
+      <video src="LitecorLogo.mp4" autoplay muted loop playsinline></video>
       <span>LITECOR</span>
     </div>
     <nav>
@@ -200,65 +260,101 @@ section{min-height:100vh;display:flex;align-items:center}
   </div>
 </header>
 
+<!-- Liteify -->
 <div class="liteify">
-  <div class="liteify-btn" id="liteifyBtn">Liteify</div>
+  <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
   <div class="liteify-panel" id="liteifyPanel">
-    <h4>Liteify</h4>
-    <p style="font-size:13px;opacity:.7">Music starts when you press play.</p>
-    <button id="playBtn">▶ Play</button>
+    <strong>Liteify</strong>
+    <p style="font-size:12px;color:var(--muted)">Background music player</p>
   </div>
 </div>
 
 <main>
-<section>
-  <div class="hero">
-    <div>
-      <h1>Editing that feels right<span id="typingCursor">|</span></h1>
-      <p>Clean rhythm. Sharp cuts. Built for how people actually watch.</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="type-wrap">
+        <span id="typed"></span><span class="cursor"></span>
+      </div>
+      <p>
+        Editing isn’t just about cutting clips together. It’s about pacing,
+        rhythm, restraint, and knowing when to let a moment breathe.
+        Litecor focuses on edits that feel natural — the kind viewers stay for
+        without realizing why.
+      </p>
 
-      <div class="select">
-        <div class="card" onclick="location.href='editing.html'">
-          <h3>Editing</h3>
-          <p>Longform, shorts, clips.</p>
-        </div>
-        <div class="card" onclick="location.href='discord.html'">
-          <h3>Discord</h3>
-          <p>Community & collabs.</p>
-        </div>
+      <div class="scroll-hint">
+        <span>Scroll to explore</span>
+        <div class="arrow"></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="scroll-hint">↓</div>
-</section>
+  <!-- EDITING -->
+  <section class="section">
+    <div class="section-inner">
+      <h2>Editing</h2>
+      <p>Longform storytelling, shorts, and clean clips built for retention.</p>
+      <a href="editing.html">View editing</a>
+    </div>
+  </section>
+
+  <!-- DISCORD -->
+  <section class="section">
+    <div class="section-inner">
+      <h2>Discord</h2>
+      <p>Feedback, workflow talk, and hanging out while renders finish.</p>
+      <a href="discord.html">Join Discord</a>
+    </div>
+  </section>
 </main>
 
+<div class="trail" id="trail"></div>
+
 <script>
-/* CURSOR */
-const c=document.getElementById("cursor");
-const t=document.getElementById("trail");
-let mx=0,my=0,tx=0,ty=0;
-window.addEventListener("mousemove",e=>{
-  mx=e.clientX;my=e.clientY;
-  c.style.transform=`translate(${mx}px,${my}px)`;
+/* bg parallax */
+const bg=document.getElementById('bg');
+window.addEventListener('mousemove',e=>{
+  bg.style.transform=`translate(${(e.clientX/window.innerWidth-.5)*20}px,${(e.clientY/window.innerHeight-.5)*20}px)`;
 });
-(function loop(){
-  tx+=(mx-tx)*0.15;
-  ty+=(my-ty)*0.15;
-  t.style.transform=`translate(${tx}px,${ty}px)`;
-  requestAnimationFrame(loop);
+
+/* typing effect */
+const text="Editing that feels right";
+let i=0;
+const el=document.getElementById('typed');
+(function type(){
+  if(i<=text.length){
+    el.textContent=text.slice(0,i++);
+    setTimeout(type,70);
+  }
 })();
 
-/* LITEIFY */
-const liteBtn=document.getElementById("liteifyBtn");
-const litePanel=document.getElementById("liteifyPanel");
-liteBtn.onclick=()=>litePanel.classList.toggle("open");
+/* Liteify toggle */
+const t=document.getElementById('liteifyToggle');
+const p=document.getElementById('liteifyPanel');
+t.onclick=()=>p.classList.toggle('open');
 
-/* typing cursor blink */
-setInterval(()=>{
-  const cur=document.getElementById("typingCursor");
-  cur.style.opacity=cur.style.opacity==="0"?"1":"0";
-},500);
+/* cursor trail */
+const trail=document.getElementById('trail');
+const dots=[];
+for(let i=0;i<10;i++){
+  const d=document.createElement('div');
+  d.className='dot';
+  trail.appendChild(d);
+  dots.push({el:d,x:-999,y:-999});
+}
+let mx=0,my=0;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function loop(){
+  let x=mx,y=my;
+  dots.forEach((p,i)=>{
+    p.x+=(x-p.x)*(0.3-i*0.02);
+    p.y+=(y-p.y)*(0.3-i*0.02);
+    p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
+    x=p.x;y=p.y;
+  });
+  requestAnimationFrame(loop);
+})();
 </script>
 
 </body>

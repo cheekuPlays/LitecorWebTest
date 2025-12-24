@@ -1,161 +1,199 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Litecor — Editing that feels right</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Litecor</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#050b18;
-  --glass:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.12);
-  --accent1:#00bcd4;
-  --accent2:#6a00ff;
+  --bg1:#070b16;
+  --bg2:#0b1a2e;
+  --accent:#6ae3ff;
+  --accent2:#9d7bff;
+  --glass:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.12);
   --text:#eafcff;
 }
 
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;font-family:Inter;background:var(--bg);color:var(--text);overflow-x:hidden}
-
-/* ===== background ===== */
-.bg{
-  position:fixed;inset:0;z-index:-1;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(0,188,212,.25), transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(106,0,255,.25), transparent 45%);
-  filter:blur(40px);
-  animation:floatBG 20s linear infinite;
+html,body{
+  margin:0;height:100%;
+  font-family:Inter,system-ui,sans-serif;
+  background:linear-gradient(120deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  overflow-x:hidden;
 }
-@keyframes floatBG{
+
+/* ---------- BACKGROUND ---------- */
+.bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+.bg::before{
+  content:"";
+  position:absolute;inset:-30%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(106,227,255,.18), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(157,123,255,.18), transparent 45%);
+  filter:blur(80px);
+  animation:bgMove 20s ease-in-out infinite;
+}
+@keyframes bgMove{
   0%{transform:translateY(0)}
-  50%{transform:translateY(-40px)}
+  50%{transform:translateY(30px)}
   100%{transform:translateY(0)}
 }
 
-/* ===== header ===== */
+/* ---------- CURSOR ---------- */
+.cursor{
+  position:fixed;left:0;top:0;width:14px;height:14px;
+  border-radius:50%;
+  background:var(--accent);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:999;
+  box-shadow:0 0 20px rgba(106,227,255,.6);
+}
+.cursor-trail{
+  position:fixed;left:0;top:0;width:40px;height:40px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(106,227,255,.25),transparent 60%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:998;
+}
+
+/* ---------- HEADER ---------- */
 header{
-  position:fixed;top:14px;left:0;right:0;z-index:50;
+  position:fixed;top:16px;left:0;right:0;
   display:flex;justify-content:center;
+  z-index:50;
 }
 .header-inner{
-  width:1100px;max-width:95%;
-  display:flex;align-items:center;gap:18px;
+  width:min(1200px,calc(100% - 40px));
+  display:flex;align-items:center;justify-content:space-between;
 }
 .logo{
   display:flex;align-items:center;gap:10px;
 }
 .logo video{
-  width:52px;height:52px;border-radius:14px;
+  width:48px;height:48px;border-radius:12px;
 }
 .logo span{
-  font-weight:700;letter-spacing:.15em;
-  background:linear-gradient(90deg,var(--accent1),var(--accent2));
-  -webkit-background-clip:text;color:transparent;
+  font-weight:700;letter-spacing:.08em;
+  color:var(--accent);
 }
-nav{margin-left:auto;display:flex;gap:10px}
+
+/* ---------- NAV ---------- */
+nav{
+  display:flex;gap:10px;
+}
 nav a{
-  text-decoration:none;color:var(--text);
-  padding:7px 14px;border-radius:999px;
+  text-decoration:none;
+  color:var(--text);
+  padding:8px 14px;
+  border-radius:999px;
   background:var(--glass);
   border:1px solid var(--border);
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(14px);
   transition:.2s;
 }
 nav a:hover{transform:translateY(-2px)}
 
-/* ===== Liteify ===== */
+/* ---------- LITEIFY ---------- */
 .liteify{
-  position:fixed;top:16px;right:16px;z-index:60;
+  position:fixed;top:18px;right:18px;z-index:60;
 }
 .liteify-btn{
-  padding:8px 14px;border-radius:999px;
+  padding:8px 14px;
+  border-radius:999px;
   background:var(--glass);
   border:1px solid var(--border);
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(16px);
   cursor:pointer;
 }
 .liteify-panel{
-  margin-top:10px;
-  width:260px;
-  background:rgba(5,10,20,.75);
-  border:1px solid var(--border);
+  position:absolute;top:44px;right:0;
+  width:260px;padding:14px;
   border-radius:18px;
-  backdrop-filter:blur(16px);
-  padding:14px;
-  display:none;
+  background:rgba(6,10,20,.85);
+  border:1px solid var(--border);
+  backdrop-filter:blur(18px);
+  opacity:0;pointer-events:none;
+  transform:translateY(-10px) scale(.95);
+  transition:.25s;
 }
-.liteify-panel.open{display:block}
+.liteify-panel.open{
+  opacity:1;pointer-events:auto;
+  transform:none;
+}
+.liteify-panel h4{margin:0 0 6px}
 
-/* ===== cursor trail ===== */
-.trail{
-  position:fixed;pointer-events:none;z-index:100;
-}
-.dot{
-  position:absolute;width:6px;height:6px;border-radius:50%;
-  background:var(--accent1);opacity:.8;
-}
-
-/* ===== hero ===== */
-main{padding-top:140px}
+/* ---------- HERO ---------- */
+main{position:relative;z-index:10}
+section{min-height:100vh;display:flex;align-items:center}
 .hero{
-  max-width:1100px;margin:auto;
-  display:flex;justify-content:space-between;align-items:center;
+  width:min(1200px,92%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
   gap:40px;
 }
 .hero h1{
-  font-size:52px;line-height:1.05;margin:0;
+  font-size:clamp(32px,5vw,56px);
 }
-.type-cursor{
-  display:inline-block;width:2px;height:1em;
-  background:#fff;margin-left:4px;
-  animation:blink 1s infinite;
-}
-@keyframes blink{50%{opacity:0}}
+.hero p{opacity:.8}
 
-.hero p{max-width:520px;color:rgba(234,252,255,.8)}
-
-/* ===== choice cards ===== */
-.choice-wrap{
-  display:flex;gap:28px;margin-top:40px;
+/* ---------- CENTER SELECTION ---------- */
+.select{
+  margin-top:40px;
+  display:flex;gap:24px;
 }
-.choice{
+.card{
   flex:1;
-  height:240px;
+  padding:30px;
   border-radius:22px;
   background:var(--glass);
   border:1px solid var(--border);
   backdrop-filter:blur(18px);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:700;
   cursor:pointer;
   transition:.25s;
 }
-.choice:hover{transform:translateY(-8px) scale(1.02)}
+.card:hover{
+  transform:translateY(-6px) scale(1.02);
+}
+.card h3{margin:0}
 
+/* ---------- SCROLL ARROW ---------- */
 .scroll-hint{
-  margin-top:30px;font-size:14px;opacity:.7;
-  animation:float 1.6s infinite;
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);
+  animation:bounce 1.6s infinite;
+  opacity:.6;
 }
-@keyframes float{
-  50%{transform:translateY(6px)}
+@keyframes bounce{
+  0%,100%{transform:translate(-50%,0)}
+  50%{transform:translate(-50%,10px)}
 }
+
+/* ---------- JS HELPERS ---------- */
 </style>
 </head>
-
 <body>
+
 <div class="bg"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="trail"></div>
 
 <header>
   <div class="header-inner">
     <div class="logo">
-      <video src="LitecorLogo.mp4" autoplay loop muted></video>
+      <video src="LitecorLogo.mp4" autoplay muted loop></video>
       <span>LITECOR</span>
     </div>
     <nav>
-      <a href="index.html">Home</a>
       <a href="editing.html">Editing</a>
       <a href="discord.html">Discord</a>
     </nav>
@@ -163,60 +201,65 @@ main{padding-top:140px}
 </header>
 
 <div class="liteify">
-  <div class="liteify-btn" id="liteifyBtn">Liteify ♪</div>
+  <div class="liteify-btn" id="liteifyBtn">Liteify</div>
   <div class="liteify-panel" id="liteifyPanel">
-    <p style="margin:0;font-size:13px">Background music</p>
-    <audio controls style="width:100%">
-      <source src="song1.mp3">
-    </audio>
+    <h4>Liteify</h4>
+    <p style="font-size:13px;opacity:.7">Music starts when you press play.</p>
+    <button id="playBtn">▶ Play</button>
   </div>
 </div>
 
 <main>
-  <section class="hero">
+<section>
+  <div class="hero">
     <div>
-      <h1>
-        Editing that feels right<span class="type-cursor"></span>
-      </h1>
-      <p>
-        Clean pacing. Sharp cuts. Rhythm that matches how people actually watch.
-        No fixed prices. Just good work and honest quotes.
-      </p>
+      <h1>Editing that feels right<span id="typingCursor">|</span></h1>
+      <p>Clean rhythm. Sharp cuts. Built for how people actually watch.</p>
 
-      <div class="choice-wrap">
-        <a class="choice" href="editing.html">Editing</a>
-        <a class="choice" href="discord.html">Discord</a>
+      <div class="select">
+        <div class="card" onclick="location.href='editing.html'">
+          <h3>Editing</h3>
+          <p>Longform, shorts, clips.</p>
+        </div>
+        <div class="card" onclick="location.href='discord.html'">
+          <h3>Discord</h3>
+          <p>Community & collabs.</p>
+        </div>
       </div>
-
-      <div class="scroll-hint">↓ scroll or choose a path</div>
     </div>
-  </section>
+  </div>
+
+  <div class="scroll-hint">↓</div>
+</section>
 </main>
 
 <script>
-/* liteify toggle */
-liteifyBtn.onclick=()=>liteifyPanel.classList.toggle("open")
-
-/* cursor trail */
-const trail=document.createElement("div");
-trail.className="trail";document.body.appendChild(trail);
-let dots=[];
-for(let i=0;i<10;i++){
-  const d=document.createElement("div");
-  d.className="dot";trail.appendChild(d);
-  dots.push({el:d,x:0,y:0});
-}
+/* CURSOR */
+const c=document.getElementById("cursor");
+const t=document.getElementById("trail");
+let mx=0,my=0,tx=0,ty=0;
 window.addEventListener("mousemove",e=>{
-  dots[0].x=e.clientX;dots[0].y=e.clientY;
+  mx=e.clientX;my=e.clientY;
+  c.style.transform=`translate(${mx}px,${my}px)`;
 });
 (function loop(){
-  for(let i=dots.length-1;i>0;i--){
-    dots[i].x+=(dots[i-1].x-dots[i].x)*.35;
-    dots[i].y+=(dots[i-1].y-dots[i].y)*.35;
-  }
-  dots.forEach(d=>d.el.style.transform=`translate(${d.x}px,${d.y}px)`);
+  tx+=(mx-tx)*0.15;
+  ty+=(my-ty)*0.15;
+  t.style.transform=`translate(${tx}px,${ty}px)`;
   requestAnimationFrame(loop);
 })();
+
+/* LITEIFY */
+const liteBtn=document.getElementById("liteifyBtn");
+const litePanel=document.getElementById("liteifyPanel");
+liteBtn.onclick=()=>litePanel.classList.toggle("open");
+
+/* typing cursor blink */
+setInterval(()=>{
+  const cur=document.getElementById("typingCursor");
+  cur.style.opacity=cur.style.opacity==="0"?"1":"0";
+},500);
 </script>
+
 </body>
 </html>

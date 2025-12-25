@@ -146,6 +146,7 @@ main{
   display:flex;
   flex-direction:column;
   align-items:center;
+  transform:translateY(-60px); /* ⬅ moves text UP */
 }
 
 /* typing heading */
@@ -174,12 +175,13 @@ main{
 
 /* scroll hint */
 .scroll-hint{
-  margin-top:48px;
+  margin-top:44px;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:6px;
-  opacity:.85;
+  opacity:.9;
+  cursor:pointer;
 }
 .scroll-hint span{
   font-size:12px;
@@ -234,7 +236,7 @@ main{
 .panel h2{margin:0 0 8px}
 .panel p{color:var(--muted);max-width:260px}
 
-/* ================= CURSOR TRAIL (OPTIMIZED) ================= */
+/* ================= CURSOR TRAIL ================= */
 .trail{
   position:fixed;
   inset:0;
@@ -289,7 +291,7 @@ main{
         Litecor focuses on pacing that feels natural and edits viewers stay for.
       </p>
 
-      <div class="scroll-hint">
+      <div class="scroll-hint" id="scrollHint">
         <span>Scroll to explore</span>
         <div class="arrow"></div>
       </div>
@@ -297,7 +299,7 @@ main{
   </section>
 
   <!-- PANELS -->
-  <section class="panels">
+  <section class="panels" id="panels">
     <div class="panel-wrap">
       <div class="panel-zone" data-link="editing.html">
         <div class="panel">
@@ -336,6 +338,11 @@ const el=document.getElementById('typed');
   }
 })();
 
+/* scroll hint click */
+document.getElementById('scrollHint').addEventListener('click',()=>{
+  document.getElementById('panels').scrollIntoView({behavior:'smooth'});
+});
+
 /* Liteify */
 const t=document.getElementById('liteifyToggle');
 const p=document.getElementById('liteifyPanel');
@@ -357,7 +364,7 @@ document.querySelectorAll('.panel-zone').forEach(zone=>{
 /* optimized cursor trail */
 const trail=document.getElementById('trail');
 const dots=[];
-const DOTS=7;   // reduced count
+const DOTS=7;
 for(let i=0;i<DOTS;i++){
   const d=document.createElement('div');
   d.className='dot';

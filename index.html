@@ -129,48 +129,6 @@ header{
 }
 .liteify-panel *{cursor:auto}
 
-.liteify-title{
-  font-weight:700;
-  margin-bottom:2px;
-}
-.liteify-track{
-  font-size:13px;
-  color:var(--muted);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  margin-bottom:10px;
-}
-
-.liteify-controls{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin-bottom:8px;
-}
-.liteify-btn{
-  width:32px;height:32px;
-  border-radius:50%;
-  border:none;
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  cursor:pointer;
-}
-.liteify-btn.main{
-  background:linear-gradient(120deg,var(--accent),var(--accent2));
-  color:#04131a;
-  font-weight:700;
-}
-
-.liteify-volume{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.liteify-volume input{
-  flex:1;
-}
-
 /* MAIN */
 main{position:relative;z-index:5;padding-top:160px}
 
@@ -181,6 +139,7 @@ main{position:relative;z-index:5;padding-top:160px}
   align-items:center;
   justify-content:center;
   text-align:center;
+  position:relative;
 }
 .hero-inner{
   max-width:860px;
@@ -202,6 +161,35 @@ main{position:relative;z-index:5;padding-top:160px}
 .hero p{
   margin-top:18px;
   color:var(--muted);
+}
+
+/* ===== SCROLL HINT (VISIBLE FIX) ===== */
+.scroll-hint{
+  position:absolute;
+  bottom:48px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  opacity:.9;
+  cursor:pointer;
+}
+.scroll-hint span{
+  font-size:12px;
+  color:var(--muted);
+}
+.arrow{
+  width:18px;height:18px;
+  border-left:2px solid var(--accent);
+  border-bottom:2px solid var(--accent);
+  transform:rotate(-45deg);
+  animation:bounce 1.6s infinite;
+}
+@keyframes bounce{
+  0%,100%{transform:translateY(0) rotate(-45deg)}
+  50%{transform:translateY(8px) rotate(-45deg)}
 }
 
 /* PANELS */
@@ -262,19 +250,8 @@ main{position:relative;z-index:5;padding-top:160px}
       <div class="liteify">
         <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
         <div class="liteify-panel" id="liteifyPanel">
-          <div class="liteify-title">Liteify</div>
-          <div class="liteify-track" id="trackName">—</div>
-
-          <div class="liteify-controls">
-            <button class="liteify-btn" id="prev">⏮</button>
-            <button class="liteify-btn main" id="play">▶</button>
-            <button class="liteify-btn" id="next">⏭</button>
-          </div>
-
-          <div class="liteify-volume">
-            🔊
-            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.35">
-          </div>
+          <strong>Liteify</strong>
+          <p style="font-size:12px;color:var(--muted)">Background music player</p>
         </div>
       </div>
     </div>
@@ -289,9 +266,15 @@ main{position:relative;z-index:5;padding-top:160px}
       </div>
       <p>Editing isn’t about doing more. It’s about knowing what to remove.</p>
     </div>
+
+    <!-- SCROLL HINT -->
+    <div class="scroll-hint" id="scrollHint">
+      <span>Scroll to explore</span>
+      <div class="arrow"></div>
+    </div>
   </section>
 
-  <section class="panels">
+  <section class="panels" id="panels">
     <div class="panel-wrap">
       <div class="panel-zone" data-link="editing.html">
         <div class="panel"><h2>Editing</h2><p>Retention-focused cuts</p></div>
@@ -311,6 +294,11 @@ const text="Editing that feels right";
 let i=0;
 const el=document.getElementById('typed');
 (function t(){if(i<=text.length){el.textContent=text.slice(0,i++);setTimeout(t,70)}})();
+
+/* scroll hint click */
+document.getElementById('scrollHint').onclick=()=>{
+  document.getElementById('panels').scrollIntoView({behavior:'smooth'});
+};
 
 /* bg parallax */
 const bg=document.getElementById('bg');
@@ -333,56 +321,6 @@ window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
   });
   requestAnimationFrame(loop);
 })();
-
-/* panels */
-document.querySelectorAll('.panel-zone').forEach(z=>{
-  const c=z.querySelector('.panel');
-  z.onmousemove=e=>{
-    const r=z.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5;
-    const y=(e.clientY-r.top)/r.height-.5;
-    c.style.transform=`rotateX(${-y*12}deg) rotateY(${x*14}deg) translateY(-6px)`;
-  };
-  z.onmouseleave=()=>c.style.transform='';
-  z.onclick=()=>location.href=z.dataset.link;
-});
-
-/* ===== LITEIFY (OLD BEHAVIOR) ===== */
-const audio=new Audio();
-const tracks=[
-  {name:'Track 1',src:'song1.mp3'},
-  {name:'Track 2',src:'song2.mp3'},
-  {name:'Track 3',src:'song3.mp3'}
-];
-let idx=Math.floor(Math.random()*tracks.length);
-const trackName=document.getElementById('trackName');
-const playBtn=document.getElementById('play');
-
-function load(){
-  audio.src=tracks[idx].src;
-  trackName.textContent=tracks[idx].name;
-}
-function play(){
-  audio.play();
-  playBtn.textContent='⏸';
-}
-function pause(){
-  audio.pause();
-  playBtn.textContent='▶';
-}
-document.getElementById('next').onclick=()=>{idx=(idx+1)%tracks.length;load();play();}
-document.getElementById('prev').onclick=()=>{idx=(idx-1+tracks.length)%tracks.length;load();play();}
-playBtn.onclick=()=>audio.paused?play():pause();
-document.getElementById('volume').oninput=e=>audio.volume=e.target.value;
-load();
-
-/* liteify toggle */
-const lt=document.getElementById('liteifyToggle');
-const lp=document.getElementById('liteifyPanel');
-lt.onclick=()=>{
-  lp.classList.toggle('open');
-  if(audio.paused) play();
-};
 </script>
 
 </body>

@@ -93,7 +93,7 @@ header{
 }
 .header-right a:hover{transform:translateY(-2px)}
 
-/* LITEIFY (UNCHANGED) */
+/* LITEIFY */
 .liteify{
   position:relative;
   margin-left:10px;
@@ -142,7 +142,7 @@ main{position:relative;z-index:5;padding-top:160px}
 }
 .hero-inner{
   max-width:860px;
-  transform:translateY(-80px); /* slightly less aggressive */
+  transform:translateY(-80px);
 }
 .type-wrap{
   font-size:clamp(36px,5vw,56px);
@@ -163,7 +163,7 @@ main{position:relative;z-index:5;padding-top:160px}
   max-width:640px;
 }
 
-/* SCROLL HINT (NOW UNDER TEXT) */
+/* SCROLL HINT */
 .scroll-hint{
   margin-top:38px;
   display:flex;
@@ -189,9 +189,10 @@ main{position:relative;z-index:5;padding-top:160px}
   50%{transform:translateY(8px) rotate(-45deg)}
 }
 
-/* PANELS */
+/* PANELS — MOVED UP */
 .panels{
-  min-height:90vh;
+  min-height:60vh;              /* ⬅ reduced */
+  margin-top:-120px;            /* ⬅ pulled upward */
   display:flex;
   justify-content:center;
   align-items:center;
@@ -261,10 +262,8 @@ main{position:relative;z-index:5;padding-top:160px}
       <div class="type-wrap">
         <span id="typed"></span><span class="cursor"></span>
       </div>
-
       <p>Editing isn’t about doing more. It’s about knowing what to remove.</p>
 
-      <!-- SCROLL HINT NOW DIRECTLY BELOW TEXT -->
       <div class="scroll-hint" id="scrollHint">
         <span>Scroll to explore</span>
         <div class="arrow"></div>

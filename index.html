@@ -93,7 +93,7 @@ header{
 }
 .header-right a:hover{transform:translateY(-2px)}
 
-/* LITEIFY */
+/* LITEIFY (UNCHANGED) */
 .liteify{
   position:relative;
   margin-left:10px;
@@ -139,11 +139,10 @@ main{position:relative;z-index:5;padding-top:160px}
   align-items:center;
   justify-content:center;
   text-align:center;
-  position:relative;
 }
 .hero-inner{
   max-width:860px;
-  transform:translateY(-110px);
+  transform:translateY(-80px); /* slightly less aggressive */
 }
 .type-wrap{
   font-size:clamp(36px,5vw,56px);
@@ -159,16 +158,14 @@ main{position:relative;z-index:5;padding-top:160px}
 }
 @keyframes blink{50%{opacity:0}}
 .hero p{
-  margin-top:18px;
+  margin:18px auto 0;
   color:var(--muted);
+  max-width:640px;
 }
 
-/* ===== SCROLL HINT (VISIBLE FIX) ===== */
+/* SCROLL HINT (NOW UNDER TEXT) */
 .scroll-hint{
-  position:absolute;
-  bottom:48px;
-  left:50%;
-  transform:translateX(-50%);
+  margin-top:38px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -264,13 +261,14 @@ main{position:relative;z-index:5;padding-top:160px}
       <div class="type-wrap">
         <span id="typed"></span><span class="cursor"></span>
       </div>
-      <p>Editing isn’t about doing more. It’s about knowing what to remove.</p>
-    </div>
 
-    <!-- SCROLL HINT -->
-    <div class="scroll-hint" id="scrollHint">
-      <span>Scroll to explore</span>
-      <div class="arrow"></div>
+      <p>Editing isn’t about doing more. It’s about knowing what to remove.</p>
+
+      <!-- SCROLL HINT NOW DIRECTLY BELOW TEXT -->
+      <div class="scroll-hint" id="scrollHint">
+        <span>Scroll to explore</span>
+        <div class="arrow"></div>
+      </div>
     </div>
   </section>
 
@@ -295,7 +293,7 @@ let i=0;
 const el=document.getElementById('typed');
 (function t(){if(i<=text.length){el.textContent=text.slice(0,i++);setTimeout(t,70)}})();
 
-/* scroll hint click */
+/* scroll click */
 document.getElementById('scrollHint').onclick=()=>{
   document.getElementById('panels').scrollIntoView({behavior:'smooth'});
 };
@@ -308,7 +306,12 @@ window.onmousemove=e=>{
 
 /* cursor trail */
 const trail=document.getElementById('trail'),dots=[];
-for(let i=0;i<8;i++){const d=document.createElement('div');d.className='dot';trail.appendChild(d);dots.push({el:d,x:0,y:0})}
+for(let i=0;i<8;i++){
+  const d=document.createElement('div');
+  d.className='dot';
+  trail.appendChild(d);
+  dots.push({el:d,x:0,y:0});
+}
 let mx=0,my=0;
 window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function loop(){

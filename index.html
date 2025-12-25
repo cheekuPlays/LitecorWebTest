@@ -25,7 +25,7 @@ html,body{
 }
 html::-webkit-scrollbar{display:none}
 
-/* ===== BG ===== */
+/* ================= BG ================= */
 .bg{
   position:fixed;
   inset:-30%;
@@ -34,9 +34,10 @@ html::-webkit-scrollbar{display:none}
     radial-gradient(circle at 75% 65%,rgba(138,92,255,.22),transparent 50%);
   filter:blur(60px);
   z-index:0;
+  transition:transform .25s linear;
 }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 header{
   position:fixed;
   top:14px;
@@ -89,7 +90,7 @@ nav a{
 }
 nav a:hover{transform:translateY(-2px)}
 
-/* ===== LITEIFY ===== */
+/* ================= LITEIFY ================= */
 .liteify{
   position:fixed;
   top:18px;
@@ -125,12 +126,14 @@ nav a:hover{transform:translateY(-2px)}
 }
 .liteify-panel *{cursor:auto}
 
-/* ===== MAIN ===== */
+/* ================= MAIN ================= */
 main{
   position:relative;
   z-index:5;
   padding-top:160px;
 }
+
+/* ================= HERO ================= */
 .hero{
   min-height:100vh;
   display:flex;
@@ -138,16 +141,23 @@ main{
   justify-content:center;
   text-align:center;
 }
-.hero-inner{max-width:860px}
+.hero-inner{
+  max-width:860px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 
-/* typing */
+/* typing heading */
 .type-wrap{
   font-size:clamp(36px,5vw,56px);
   font-weight:700;
   display:inline-flex;
+  align-items:center;
 }
 .cursor{
-  width:10px;height:1.1em;
+  width:10px;
+  height:1.1em;
   background:var(--accent);
   margin-left:6px;
   animation:blink 1s steps(1) infinite;
@@ -158,10 +168,36 @@ main{
   margin:18px auto 0;
   max-width:640px;
   color:var(--muted);
+  font-size:1.05rem;
   line-height:1.55;
 }
 
-/* ===== PANELS ===== */
+/* scroll hint */
+.scroll-hint{
+  margin-top:48px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  opacity:.85;
+}
+.scroll-hint span{
+  font-size:12px;
+  color:var(--muted);
+}
+.arrow{
+  width:18px;height:18px;
+  border-left:2px solid var(--accent);
+  border-bottom:2px solid var(--accent);
+  transform:rotate(-45deg);
+  animation:bounce 1.6s infinite;
+}
+@keyframes bounce{
+  0%,100%{transform:translateY(0) rotate(-45deg)}
+  50%{transform:translateY(8px) rotate(-45deg)}
+}
+
+/* ================= PANELS ================= */
 .panels{
   min-height:90vh;
   display:flex;
@@ -177,7 +213,6 @@ main{
 .panel-zone{
   width:360px;
   height:260px;
-  position:relative;
   perspective:1000px;
 }
 .panel{
@@ -194,15 +229,12 @@ main{
   justify-content:center;
   text-align:center;
   cursor:pointer;
-  transition:transform .15s ease, box-shadow .15s ease;
+  transition:transform .14s ease, box-shadow .14s ease;
 }
 .panel h2{margin:0 0 8px}
-.panel p{
-  color:var(--muted);
-  max-width:260px;
-}
+.panel p{color:var(--muted);max-width:260px}
 
-/* ===== CURSOR TRAIL ===== */
+/* ================= CURSOR TRAIL (OPTIMIZED) ================= */
 .trail{
   position:fixed;
   inset:0;
@@ -211,9 +243,9 @@ main{
 }
 .dot{
   position:absolute;
-  width:6px;height:6px;
+  width:7px;height:7px;
   border-radius:50%;
-  background:rgba(108,243,255,.9);
+  background:rgba(108,243,255,.85);
   mix-blend-mode:screen;
 }
 </style>
@@ -245,22 +277,28 @@ main{
 </div>
 
 <main>
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
       <div class="type-wrap">
         <span id="typed"></span><span class="cursor"></span>
       </div>
+
       <p>
         Editing isn’t about doing more. It’s about knowing what to remove.
         Litecor focuses on pacing that feels natural and edits viewers stay for.
       </p>
+
+      <div class="scroll-hint">
+        <span>Scroll to explore</span>
+        <div class="arrow"></div>
+      </div>
     </div>
   </section>
 
   <!-- PANELS -->
   <section class="panels">
     <div class="panel-wrap">
-
       <div class="panel-zone" data-link="editing.html">
         <div class="panel">
           <h2>Editing</h2>
@@ -274,7 +312,6 @@ main{
           <p>Feedback, workflow, and real collaboration.</p>
         </div>
       </div>
-
     </div>
   </section>
 </main>
@@ -313,18 +350,15 @@ document.querySelectorAll('.panel-zone').forEach(zone=>{
     const y=(e.clientY-r.top)/r.height-.5;
     card.style.transform=`rotateX(${-y*12}deg) rotateY(${x*14}deg) translateY(-6px)`;
   });
-  zone.addEventListener('mouseleave',()=>{
-    card.style.transform='';
-  });
-  zone.addEventListener('click',()=>{
-    location.href=zone.dataset.link;
-  });
+  zone.addEventListener('mouseleave',()=>card.style.transform='');
+  zone.addEventListener('click',()=>location.href=zone.dataset.link);
 });
 
-/* cursor trail */
+/* optimized cursor trail */
 const trail=document.getElementById('trail');
 const dots=[];
-for(let i=0;i<10;i++){
+const DOTS=7;   // reduced count
+for(let i=0;i<DOTS;i++){
   const d=document.createElement('div');
   d.className='dot';
   trail.appendChild(d);
@@ -335,8 +369,9 @@ window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function loop(){
   let x=mx,y=my;
   dots.forEach((p,i)=>{
-    p.x+=(x-p.x)*(0.3-i*0.02);
-    p.y+=(y-p.y)*(0.3-i*0.02);
+    const speed=0.35-i*0.03;
+    p.x+=(x-p.x)*speed;
+    p.y+=(y-p.y)*speed;
     p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
     x=p.x;y=p.y;
   });

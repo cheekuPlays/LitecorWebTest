@@ -34,6 +34,7 @@ html::-webkit-scrollbar{display:none}
     radial-gradient(circle at 75% 65%,rgba(138,92,255,.22),transparent 50%);
   filter:blur(60px);
   z-index:0;
+  transition:transform .25s linear;
 }
 
 /* HEADER */
@@ -55,7 +56,7 @@ header{
   align-items:center;
   gap:12px;
   cursor:pointer;
-  margin-left:-32px;
+  margin-left:-24px;
 }
 .logo video{
   width:56px;height:56px;
@@ -73,12 +74,14 @@ header{
   100%{color:var(--accent)}
 }
 
-.nav-right{
+/* RIGHT */
+.header-right{
   margin-left:auto;
   display:flex;
+  align-items:center;
   gap:10px;
 }
-.nav-right a{
+.header-right a{
   font-size:13px;
   padding:7px 14px;
   border-radius:999px;
@@ -86,15 +89,14 @@ header{
   border:1px solid rgba(255,255,255,.08);
   color:#eafcff;
   text-decoration:none;
+  transition:.18s;
 }
-.nav-right a:hover{transform:translateY(-2px)}
+.header-right a:hover{transform:translateY(-2px)}
 
-/* LITEIFY — RESTORED SIMPLE VERSION */
+/* LITEIFY */
 .liteify{
-  position:fixed;
-  top:18px;
-  right:18px;
-  z-index:80;
+  position:relative;
+  margin-left:10px;
 }
 .liteify-toggle{
   padding:7px 14px;
@@ -105,11 +107,13 @@ header{
   backdrop-filter:blur(14px);
 }
 .liteify-panel{
-  margin-top:10px;
+  position:absolute;
+  top:42px;
+  right:0;
   width:260px;
   padding:14px;
   border-radius:18px;
-  background:rgba(6,10,22,.85);
+  background:rgba(6,10,22,.88);
   backdrop-filter:blur(22px);
   border:1px solid rgba(255,255,255,.12);
   box-shadow:0 30px 80px rgba(0,0,0,.85);
@@ -123,18 +127,52 @@ header{
   transform:none;
   pointer-events:auto;
 }
-/* IMPORTANT: stop cursor trail inside */
-.liteify-panel,
-.liteify-panel *{
-  cursor:auto;
+.liteify-panel *{cursor:auto}
+
+.liteify-title{
+  font-weight:700;
+  margin-bottom:2px;
+}
+.liteify-track{
+  font-size:13px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-bottom:10px;
+}
+
+.liteify-controls{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.liteify-btn{
+  width:32px;height:32px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  cursor:pointer;
+}
+.liteify-btn.main{
+  background:linear-gradient(120deg,var(--accent),var(--accent2));
+  color:#04131a;
+  font-weight:700;
+}
+
+.liteify-volume{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.liteify-volume input{
+  flex:1;
 }
 
 /* MAIN */
-main{
-  position:relative;
-  z-index:5;
-  padding-top:150px;
-}
+main{position:relative;z-index:5;padding-top:160px}
 
 /* HERO */
 .hero{
@@ -146,13 +184,12 @@ main{
 }
 .hero-inner{
   max-width:860px;
-  transform:translateY(-60px);
+  transform:translateY(-110px);
 }
 .type-wrap{
   font-size:clamp(36px,5vw,56px);
   font-weight:700;
   display:inline-flex;
-  align-items:center;
 }
 .cursor{
   width:10px;
@@ -162,37 +199,9 @@ main{
   animation:blink 1s steps(1) infinite;
 }
 @keyframes blink{50%{opacity:0}}
-
 .hero p{
-  margin:18px auto 0;
-  max-width:640px;
+  margin-top:18px;
   color:var(--muted);
-  font-size:1.05rem;
-  line-height:1.55;
-}
-
-/* SCROLL */
-.scroll-hint{
-  margin-top:40px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  cursor:pointer;
-}
-.scroll-hint span{
-  font-size:12px;
-  color:var(--muted);
-}
-.arrow{
-  width:18px;height:18px;
-  border-left:2px solid var(--accent);
-  border-bottom:2px solid var(--accent);
-  transform:rotate(-45deg);
-  animation:bounce 1.6s infinite;
-}
-@keyframes bounce{
-  0%,100%{transform:translateY(0) rotate(-45deg)}
-  50%{transform:translateY(8px) rotate(-45deg)}
 }
 
 /* PANELS */
@@ -202,18 +211,13 @@ main{
   justify-content:center;
   align-items:center;
 }
-.panel-wrap{
-  display:flex;
-  gap:40px;
-}
+.panel-wrap{display:flex;gap:40px}
 .panel-zone{
-  width:360px;
-  height:260px;
+  width:360px;height:260px;
   perspective:1000px;
 }
 .panel{
-  width:100%;
-  height:100%;
+  width:100%;height:100%;
   border-radius:22px;
   background:rgba(8,14,30,.72);
   backdrop-filter:blur(22px);
@@ -224,16 +228,12 @@ main{
   justify-content:center;
   align-items:center;
   cursor:pointer;
-  transition:.14s;
+  transition:.15s;
 }
+.panel p{color:var(--muted)}
 
-/* CURSOR TRAIL — OLD LIGHT VERSION */
-.trail{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:70;
-}
+/* CURSOR TRAIL */
+.trail{position:fixed;inset:0;pointer-events:none;z-index:70}
 .dot{
   position:absolute;
   width:6px;height:6px;
@@ -246,30 +246,40 @@ main{
 
 <body>
 
-<div class="bg"></div>
+<div class="bg" id="bg"></div>
 
 <header>
   <div class="nav">
     <div class="logo" onclick="location.href='index.html'">
-      <video src="LitecorLogo.mp4" autoplay muted loop playsinline></video>
+      <video src="LitecorLogo.mp4" autoplay muted loop></video>
       <span>LITECOR</span>
     </div>
 
-    <div class="nav-right">
+    <div class="header-right">
       <a href="editing.html">Editing</a>
       <a href="discord.html">Discord</a>
+
+      <div class="liteify">
+        <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
+        <div class="liteify-panel" id="liteifyPanel">
+          <div class="liteify-title">Liteify</div>
+          <div class="liteify-track" id="trackName">—</div>
+
+          <div class="liteify-controls">
+            <button class="liteify-btn" id="prev">⏮</button>
+            <button class="liteify-btn main" id="play">▶</button>
+            <button class="liteify-btn" id="next">⏭</button>
+          </div>
+
+          <div class="liteify-volume">
+            🔊
+            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.35">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>
-
-<!-- LITEIFY -->
-<div class="liteify">
-  <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
-  <div class="liteify-panel" id="liteifyPanel">
-    <strong>Liteify</strong>
-    <p style="font-size:12px;color:var(--muted)">Background music player</p>
-  </div>
-</div>
 
 <main>
   <section class="hero">
@@ -277,26 +287,17 @@ main{
       <div class="type-wrap">
         <span id="typed"></span><span class="cursor"></span>
       </div>
-
-      <p>
-        Editing isn’t about doing more. It’s about knowing what to remove.
-        Litecor focuses on pacing that feels natural and edits viewers stay for.
-      </p>
-
-      <div class="scroll-hint" id="scrollHint">
-        <span>Scroll to explore</span>
-        <div class="arrow"></div>
-      </div>
+      <p>Editing isn’t about doing more. It’s about knowing what to remove.</p>
     </div>
   </section>
 
-  <section class="panels" id="panels">
+  <section class="panels">
     <div class="panel-wrap">
-      <div class="panel-zone" onclick="location.href='editing.html'">
-        <div class="panel"><h2>Editing</h2></div>
+      <div class="panel-zone" data-link="editing.html">
+        <div class="panel"><h2>Editing</h2><p>Retention-focused cuts</p></div>
       </div>
-      <div class="panel-zone" onclick="location.href='discord.html'">
-        <div class="panel"><h2>Discord</h2></div>
+      <div class="panel-zone" data-link="discord.html">
+        <div class="panel"><h2>Discord</h2><p>Real collaboration</p></div>
       </div>
     </div>
   </section>
@@ -309,45 +310,79 @@ main{
 const text="Editing that feels right";
 let i=0;
 const el=document.getElementById('typed');
-(function type(){
-  if(i<=text.length){
-    el.textContent=text.slice(0,i++);
-    setTimeout(type,70);
-  }
-})();
+(function t(){if(i<=text.length){el.textContent=text.slice(0,i++);setTimeout(t,70)}})();
 
-/* Liteify toggle */
-const t=document.getElementById('liteifyToggle');
-const p=document.getElementById('liteifyPanel');
-t.onclick=()=>p.classList.toggle('open');
-
-/* scroll */
-document.getElementById('scrollHint').onclick=()=>{
-  document.getElementById('panels').scrollIntoView({behavior:'smooth'});
+/* bg parallax */
+const bg=document.getElementById('bg');
+window.onmousemove=e=>{
+  bg.style.transform=`translate(${(e.clientX/window.innerWidth-.5)*20}px,${(e.clientY/window.innerHeight-.5)*20}px)`
 };
 
-/* OLD cursor trail */
-const trail=document.getElementById('trail');
-const dots=[];
-for(let i=0;i<6;i++){
-  const d=document.createElement('div');
-  d.className='dot';
-  trail.appendChild(d);
-  dots.push({el:d,x:-999,y:-999});
-}
+/* cursor trail */
+const trail=document.getElementById('trail'),dots=[];
+for(let i=0;i<8;i++){const d=document.createElement('div');d.className='dot';trail.appendChild(d);dots.push({el:d,x:0,y:0})}
 let mx=0,my=0;
 window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function loop(){
   let x=mx,y=my;
   dots.forEach((p,i)=>{
-    const s=0.25-i*0.03;
-    p.x+=(x-p.x)*s;
-    p.y+=(y-p.y)*s;
+    const s=0.35-i*0.03;
+    p.x+=(x-p.x)*s;p.y+=(y-p.y)*s;
     p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
     x=p.x;y=p.y;
   });
   requestAnimationFrame(loop);
 })();
+
+/* panels */
+document.querySelectorAll('.panel-zone').forEach(z=>{
+  const c=z.querySelector('.panel');
+  z.onmousemove=e=>{
+    const r=z.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`rotateX(${-y*12}deg) rotateY(${x*14}deg) translateY(-6px)`;
+  };
+  z.onmouseleave=()=>c.style.transform='';
+  z.onclick=()=>location.href=z.dataset.link;
+});
+
+/* ===== LITEIFY (OLD BEHAVIOR) ===== */
+const audio=new Audio();
+const tracks=[
+  {name:'Track 1',src:'song1.mp3'},
+  {name:'Track 2',src:'song2.mp3'},
+  {name:'Track 3',src:'song3.mp3'}
+];
+let idx=Math.floor(Math.random()*tracks.length);
+const trackName=document.getElementById('trackName');
+const playBtn=document.getElementById('play');
+
+function load(){
+  audio.src=tracks[idx].src;
+  trackName.textContent=tracks[idx].name;
+}
+function play(){
+  audio.play();
+  playBtn.textContent='⏸';
+}
+function pause(){
+  audio.pause();
+  playBtn.textContent='▶';
+}
+document.getElementById('next').onclick=()=>{idx=(idx+1)%tracks.length;load();play();}
+document.getElementById('prev').onclick=()=>{idx=(idx-1+tracks.length)%tracks.length;load();play();}
+playBtn.onclick=()=>audio.paused?play():pause();
+document.getElementById('volume').oninput=e=>audio.volume=e.target.value;
+load();
+
+/* liteify toggle */
+const lt=document.getElementById('liteifyToggle');
+const lp=document.getElementById('liteifyPanel');
+lt.onclick=()=>{
+  lp.classList.toggle('open');
+  if(audio.paused) play();
+};
 </script>
 
 </body>

@@ -41,17 +41,19 @@ html::-webkit-scrollbar{display:none}
 header{
   position:fixed;
   top:14px;
-  left:0;right:0;
+  left:0;
+  right:0;
+  z-index:60;
   display:flex;
   justify-content:center;
-  z-index:60;
 }
 .nav{
   width:min(1200px,96%);
   display:flex;
   align-items:center;
-  justify-content:space-between;
 }
+
+/* LEFT */
 .logo{
   display:flex;
   align-items:center;
@@ -60,7 +62,8 @@ header{
   margin-left:-24px;
 }
 .logo video{
-  width:56px;height:56px;
+  width:56px;
+  height:56px;
   border-radius:14px;
   box-shadow:0 14px 40px rgba(0,0,0,.7);
 }
@@ -74,10 +77,17 @@ header{
   50%{color:var(--accent2)}
   100%{color:var(--accent)}
 }
+
+/* RIGHT */
+.header-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 nav{
   display:flex;
   gap:10px;
-  margin-left:auto;
 }
 nav a{
   font-size:13px;
@@ -96,7 +106,7 @@ nav a:hover{transform:translateY(-2px)}
   position:fixed;
   top:64px;
   right:24px;
-  z-index:60;
+  z-index:55;
 }
 .liteify-toggle{
   padding:7px 14px;
@@ -147,7 +157,7 @@ main{
   display:flex;
   flex-direction:column;
   align-items:center;
-  transform:translateY(-110px); /* ⬅ moves text UP */
+  transform:translateY(-110px);
 }
 
 /* typing heading */
@@ -189,7 +199,8 @@ main{
   color:var(--muted);
 }
 .arrow{
-  width:18px;height:18px;
+  width:18px;
+  height:18px;
   border-left:2px solid var(--accent);
   border-bottom:2px solid var(--accent);
   transform:rotate(-45deg);
@@ -210,8 +221,6 @@ main{
 .panel-wrap{
   display:flex;
   gap:40px;
-  flex-wrap:wrap;
-  justify-content:center;
 }
 .panel-zone{
   width:360px;
@@ -246,7 +255,8 @@ main{
 }
 .dot{
   position:absolute;
-  width:7px;height:7px;
+  width:7px;
+  height:7px;
   border-radius:50%;
   background:rgba(108,243,255,.85);
   mix-blend-mode:screen;
@@ -264,10 +274,13 @@ main{
       <video src="LitecorLogo.mp4" autoplay muted loop playsinline></video>
       <span>LITECOR</span>
     </div>
-    <nav>
-      <a href="editing.html">Editing</a>
-      <a href="discord.html">Discord</a>
-    </nav>
+
+    <div class="header-right">
+      <nav>
+        <a href="editing.html">Editing</a>
+        <a href="discord.html">Discord</a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -280,7 +293,6 @@ main{
 </div>
 
 <main>
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
       <div class="type-wrap">
@@ -299,7 +311,6 @@ main{
     </div>
   </section>
 
-  <!-- PANELS -->
   <section class="panels" id="panels">
     <div class="panel-wrap">
       <div class="panel-zone" data-link="editing.html">
@@ -322,13 +333,11 @@ main{
 <div class="trail" id="trail"></div>
 
 <script>
-/* bg parallax */
 const bg=document.getElementById('bg');
 window.addEventListener('mousemove',e=>{
   bg.style.transform=`translate(${(e.clientX/window.innerWidth-.5)*20}px,${(e.clientY/window.innerHeight-.5)*20}px)`
 });
 
-/* typing */
 const text="Editing that feels right";
 let i=0;
 const el=document.getElementById('typed');
@@ -339,47 +348,42 @@ const el=document.getElementById('typed');
   }
 })();
 
-/* scroll hint click */
-document.getElementById('scrollHint').addEventListener('click',()=>{
+document.getElementById('scrollHint').onclick=()=>{
   document.getElementById('panels').scrollIntoView({behavior:'smooth'});
-});
+};
 
-/* Liteify */
 const t=document.getElementById('liteifyToggle');
 const p=document.getElementById('liteifyPanel');
 t.onclick=()=>p.classList.toggle('open');
 
-/* panel parallax */
 document.querySelectorAll('.panel-zone').forEach(zone=>{
   const card=zone.querySelector('.panel');
-  zone.addEventListener('mousemove',e=>{
+  zone.onmousemove=e=>{
     const r=zone.getBoundingClientRect();
     const x=(e.clientX-r.left)/r.width-.5;
     const y=(e.clientY-r.top)/r.height-.5;
     card.style.transform=`rotateX(${-y*12}deg) rotateY(${x*14}deg) translateY(-6px)`;
-  });
-  zone.addEventListener('mouseleave',()=>card.style.transform='');
-  zone.addEventListener('click',()=>location.href=zone.dataset.link);
+  };
+  zone.onmouseleave=()=>card.style.transform='';
+  zone.onclick=()=>location.href=zone.dataset.link;
 });
 
-/* optimized cursor trail */
 const trail=document.getElementById('trail');
 const dots=[];
-const DOTS=7;
-for(let i=0;i<DOTS;i++){
+for(let i=0;i<7;i++){
   const d=document.createElement('div');
   d.className='dot';
   trail.appendChild(d);
   dots.push({el:d,x:-999,y:-999});
 }
 let mx=0,my=0;
-window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+window.onmousemove=e=>{mx=e.clientX;my=e.clientY};
 (function loop(){
   let x=mx,y=my;
   dots.forEach((p,i)=>{
-    const speed=0.35-i*0.03;
-    p.x+=(x-p.x)*speed;
-    p.y+=(y-p.y)*speed;
+    const s=0.35-i*0.03;
+    p.x+=(x-p.x)*s;
+    p.y+=(y-p.y)*s;
     p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
     x=p.x;y=p.y;
   });
@@ -389,6 +393,3 @@ window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 
 </body>
 </html>
-
-
-

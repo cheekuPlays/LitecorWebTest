@@ -78,18 +78,16 @@ header{
   100%{color:var(--accent)}
 }
 
-/* RIGHT */
+/* RIGHT GROUP */
 .header-right{
   margin-left:auto;
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:12px;
 }
-nav{
-  display:flex;
-  gap:10px;
-}
-nav a{
+
+/* NAV BUTTONS */
+.header-right a{
   font-size:13px;
   padding:7px 14px;
   border-radius:999px;
@@ -99,14 +97,11 @@ nav a{
   text-decoration:none;
   transition:.18s;
 }
-nav a:hover{transform:translateY(-2px)}
+.header-right a:hover{transform:translateY(-2px)}
 
 /* ================= LITEIFY ================= */
 .liteify{
-  position:fixed;
-  top:64px;
-  right:24px;
-  z-index:55;
+  position:relative;
 }
 .liteify-toggle{
   padding:7px 14px;
@@ -117,7 +112,9 @@ nav a:hover{transform:translateY(-2px)}
   backdrop-filter:blur(14px);
 }
 .liteify-panel{
-  margin-top:10px;
+  position:absolute;
+  top:42px;
+  right:0;
   width:260px;
   padding:14px;
   border-radius:18px;
@@ -276,21 +273,19 @@ main{
     </div>
 
     <div class="header-right">
-      <nav>
-        <a href="editing.html">Editing</a>
-        <a href="discord.html">Discord</a>
-      </nav>
+      <a href="editing.html">Editing</a>
+      <a href="discord.html">Discord</a>
+
+      <div class="liteify">
+        <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
+        <div class="liteify-panel" id="liteifyPanel">
+          <strong>Liteify</strong>
+          <p style="font-size:12px;color:var(--muted)">Background music player</p>
+        </div>
+      </div>
     </div>
   </div>
 </header>
-
-<div class="liteify">
-  <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
-  <div class="liteify-panel" id="liteifyPanel">
-    <strong>Liteify</strong>
-    <p style="font-size:12px;color:var(--muted)">Background music player</p>
-  </div>
-</div>
 
 <main>
   <section class="hero">

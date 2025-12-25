@@ -76,7 +76,6 @@ header{
 .nav-right{
   margin-left:auto;
   display:flex;
-  align-items:center;
   gap:10px;
 }
 .nav-right a{
@@ -87,13 +86,15 @@ header{
   border:1px solid rgba(255,255,255,.08);
   color:#eafcff;
   text-decoration:none;
-  transition:.18s;
 }
 .nav-right a:hover{transform:translateY(-2px)}
 
-/* LITEIFY */
+/* LITEIFY — RESTORED SIMPLE VERSION */
 .liteify{
-  position:relative;
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:80;
 }
 .liteify-toggle{
   padding:7px 14px;
@@ -104,9 +105,7 @@ header{
   backdrop-filter:blur(14px);
 }
 .liteify-panel{
-  position:absolute;
-  right:0;
-  top:42px;
+  margin-top:10px;
   width:260px;
   padding:14px;
   border-radius:18px;
@@ -124,7 +123,11 @@ header{
   transform:none;
   pointer-events:auto;
 }
-.liteify-panel *{cursor:auto}
+/* IMPORTANT: stop cursor trail inside */
+.liteify-panel,
+.liteify-panel *{
+  cursor:auto;
+}
 
 /* MAIN */
 main{
@@ -143,10 +146,7 @@ main{
 }
 .hero-inner{
   max-width:860px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  transform:translateY(-70px);
+  transform:translateY(-60px);
 }
 .type-wrap{
   font-size:clamp(36px,5vw,56px);
@@ -171,14 +171,12 @@ main{
   line-height:1.55;
 }
 
-/* SCROLL HINT */
+/* SCROLL */
 .scroll-hint{
-  margin-top:44px;
+  margin-top:40px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:6px;
-  opacity:.9;
   cursor:pointer;
 }
 .scroll-hint span{
@@ -201,13 +199,12 @@ main{
 .panels{
   min-height:90vh;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 }
 .panel-wrap{
   display:flex;
   gap:40px;
-  flex-wrap:wrap;
 }
 .panel-zone{
   width:360px;
@@ -224,16 +221,13 @@ main{
   box-shadow:0 30px 90px rgba(0,0,0,.7);
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  text-align:center;
+  align-items:center;
   cursor:pointer;
-  transition:transform .14s ease, box-shadow .14s ease;
+  transition:.14s;
 }
-.panel h2{margin:0 0 8px}
-.panel p{color:var(--muted);max-width:260px}
 
-/* CURSOR TRAIL */
+/* CURSOR TRAIL — OLD LIGHT VERSION */
 .trail{
   position:fixed;
   inset:0;
@@ -242,7 +236,7 @@ main{
 }
 .dot{
   position:absolute;
-  width:7px;height:7px;
+  width:6px;height:6px;
   border-radius:50%;
   background:rgba(108,243,255,.85);
   mix-blend-mode:screen;
@@ -252,7 +246,7 @@ main{
 
 <body>
 
-<div class="bg" id="bg"></div>
+<div class="bg"></div>
 
 <header>
   <div class="nav">
@@ -264,17 +258,18 @@ main{
     <div class="nav-right">
       <a href="editing.html">Editing</a>
       <a href="discord.html">Discord</a>
-
-      <div class="liteify">
-        <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
-        <div class="liteify-panel" id="liteifyPanel">
-          <strong>Liteify</strong>
-          <p style="font-size:12px;color:var(--muted)">Background music player</p>
-        </div>
-      </div>
     </div>
   </div>
 </header>
+
+<!-- LITEIFY -->
+<div class="liteify">
+  <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
+  <div class="liteify-panel" id="liteifyPanel">
+    <strong>Liteify</strong>
+    <p style="font-size:12px;color:var(--muted)">Background music player</p>
+  </div>
+</div>
 
 <main>
   <section class="hero">
@@ -297,17 +292,11 @@ main{
 
   <section class="panels" id="panels">
     <div class="panel-wrap">
-      <div class="panel-zone" data-link="editing.html">
-        <div class="panel">
-          <h2>Editing</h2>
-          <p>Longform, shorts, and clips built for retention.</p>
-        </div>
+      <div class="panel-zone" onclick="location.href='editing.html'">
+        <div class="panel"><h2>Editing</h2></div>
       </div>
-      <div class="panel-zone" data-link="discord.html">
-        <div class="panel">
-          <h2>Discord</h2>
-          <p>Feedback, workflow, and real collaboration.</p>
-        </div>
+      <div class="panel-zone" onclick="location.href='discord.html'">
+        <div class="panel"><h2>Discord</h2></div>
       </div>
     </div>
   </section>
@@ -316,12 +305,6 @@ main{
 <div class="trail" id="trail"></div>
 
 <script>
-/* bg parallax */
-const bg=document.getElementById('bg');
-window.addEventListener('mousemove',e=>{
-  bg.style.transform=`translate(${(e.clientX/window.innerWidth-.5)*20}px,${(e.clientY/window.innerHeight-.5)*20}px)`
-});
-
 /* typing */
 const text="Editing that feels right";
 let i=0;
@@ -333,33 +316,20 @@ const el=document.getElementById('typed');
   }
 })();
 
-/* scroll click */
-document.getElementById('scrollHint').onclick=()=>{
-  document.getElementById('panels').scrollIntoView({behavior:'smooth'});
-};
-
 /* Liteify toggle */
 const t=document.getElementById('liteifyToggle');
 const p=document.getElementById('liteifyPanel');
 t.onclick=()=>p.classList.toggle('open');
 
-/* panel parallax */
-document.querySelectorAll('.panel-zone').forEach(zone=>{
-  const card=zone.querySelector('.panel');
-  zone.addEventListener('mousemove',e=>{
-    const r=zone.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5;
-    const y=(e.clientY-r.top)/r.height-.5;
-    card.style.transform=`rotateX(${-y*12}deg) rotateY(${x*14}deg) translateY(-6px)`;
-  });
-  zone.addEventListener('mouseleave',()=>card.style.transform='');
-  zone.addEventListener('click',()=>location.href=zone.dataset.link);
-});
+/* scroll */
+document.getElementById('scrollHint').onclick=()=>{
+  document.getElementById('panels').scrollIntoView({behavior:'smooth'});
+};
 
-/* cursor trail (optimized) */
+/* OLD cursor trail */
 const trail=document.getElementById('trail');
 const dots=[];
-for(let i=0;i<7;i++){
+for(let i=0;i<6;i++){
   const d=document.createElement('div');
   d.className='dot';
   trail.appendChild(d);
@@ -370,9 +340,9 @@ window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function loop(){
   let x=mx,y=my;
   dots.forEach((p,i)=>{
-    const speed=0.35-i*0.03;
-    p.x+=(x-p.x)*speed;
-    p.y+=(y-p.y)*speed;
+    const s=0.25-i*0.03;
+    p.x+=(x-p.x)*s;
+    p.y+=(y-p.y)*s;
     p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
     x=p.x;y=p.y;
   });

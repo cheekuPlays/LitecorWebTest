@@ -40,7 +40,7 @@ html::-webkit-scrollbar{display:none}
 /* HEADER */
 header{
   position:fixed;
-  top:14px;
+  top:6px; /* ⬆ moved up */
   left:0;right:0;
   display:flex;
   justify-content:center;
@@ -56,10 +56,10 @@ header{
   align-items:center;
   gap:12px;
   cursor:pointer;
-  margin-left:-24px;
+  margin-left:-32px;
 }
 .logo video{
-  width:56px;height:56px;
+  width:54px;height:54px;
   border-radius:14px;
   box-shadow:0 14px 40px rgba(0,0,0,.7);
 }
@@ -96,7 +96,6 @@ header{
 /* LITEIFY */
 .liteify{
   position:relative;
-  margin-left:10px;
 }
 .liteify-toggle{
   padding:7px 14px;
@@ -130,11 +129,15 @@ header{
 .liteify-panel *{cursor:auto}
 
 /* MAIN */
-main{position:relative;z-index:5;padding-top:160px}
+main{
+  position:relative;
+  z-index:5;
+  padding-top:120px; /* ⬆ reduced */
+}
 
 /* HERO */
 .hero{
-  min-height:100vh;
+  min-height:90vh;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -142,7 +145,7 @@ main{position:relative;z-index:5;padding-top:160px}
 }
 .hero-inner{
   max-width:860px;
-  transform:translateY(-80px);
+  transform:translateY(-60px); /* ⬆ moved up */
 }
 .type-wrap{
   font-size:clamp(36px,5vw,56px);
@@ -158,14 +161,13 @@ main{position:relative;z-index:5;padding-top:160px}
 }
 @keyframes blink{50%{opacity:0}}
 .hero p{
-  margin:18px auto 0;
+  margin-top:18px;
   color:var(--muted);
-  max-width:640px;
 }
 
 /* SCROLL HINT */
 .scroll-hint{
-  margin-top:38px;
+  margin-top:34px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -189,10 +191,10 @@ main{position:relative;z-index:5;padding-top:160px}
   50%{transform:translateY(8px) rotate(-45deg)}
 }
 
-/* PANELS — MOVED UP */
+/* PANELS */
 .panels{
-  min-height:60vh;              /* ⬅ reduced */
-  margin-top:-120px;            /* ⬅ pulled upward */
+  min-height:70vh;
+  margin-top:-120px; /* ⬆ moved up */
   display:flex;
   justify-content:center;
   align-items:center;
@@ -274,10 +276,16 @@ main{position:relative;z-index:5;padding-top:160px}
   <section class="panels" id="panels">
     <div class="panel-wrap">
       <div class="panel-zone" data-link="editing.html">
-        <div class="panel"><h2>Editing</h2><p>Retention-focused cuts</p></div>
+        <div class="panel">
+          <h2>Editing</h2>
+          <p>Retention-focused cuts</p>
+        </div>
       </div>
       <div class="panel-zone" data-link="discord.html">
-        <div class="panel"><h2>Discord</h2><p>Real collaboration</p></div>
+        <div class="panel">
+          <h2>Discord</h2>
+          <p>Real collaboration</p>
+        </div>
       </div>
     </div>
   </section>
@@ -290,9 +298,9 @@ main{position:relative;z-index:5;padding-top:160px}
 const text="Editing that feels right";
 let i=0;
 const el=document.getElementById('typed');
-(function t(){if(i<=text.length){el.textContent=text.slice(0,i++);setTimeout(t,70)}})();
+(function t(){ if(i<=text.length){ el.textContent=text.slice(0,i++); setTimeout(t,70);} })();
 
-/* scroll click */
+/* scroll hint */
 document.getElementById('scrollHint').onclick=()=>{
   document.getElementById('panels').scrollIntoView({behavior:'smooth'});
 };
@@ -303,9 +311,22 @@ window.onmousemove=e=>{
   bg.style.transform=`translate(${(e.clientX/window.innerWidth-.5)*20}px,${(e.clientY/window.innerHeight-.5)*20}px)`
 };
 
+/* panel parallax */
+document.querySelectorAll('.panel-zone').forEach(z=>{
+  const c=z.querySelector('.panel');
+  z.onmousemove=e=>{
+    const r=z.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`rotateX(${-y*12}deg) rotateY(${x*14}deg) translateY(-6px)`;
+  };
+  z.onmouseleave=()=>c.style.transform='';
+  z.onclick=()=>location.href=z.dataset.link;
+});
+
 /* cursor trail */
 const trail=document.getElementById('trail'),dots=[];
-for(let i=0;i<8;i++){
+for(let i=0;i<7;i++){
   const d=document.createElement('div');
   d.className='dot';
   trail.appendChild(d);
@@ -316,13 +337,19 @@ window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function loop(){
   let x=mx,y=my;
   dots.forEach((p,i)=>{
-    const s=0.35-i*0.03;
-    p.x+=(x-p.x)*s;p.y+=(y-p.y)*s;
+    const s=0.35-i*0.04;
+    p.x+=(x-p.x)*s;
+    p.y+=(y-p.y)*s;
     p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
     x=p.x;y=p.y;
   });
   requestAnimationFrame(loop);
 })();
+
+/* liteify toggle */
+const lt=document.getElementById('liteifyToggle');
+const lp=document.getElementById('liteifyPanel');
+lt.onclick=()=>lp.classList.toggle('open');
 </script>
 
 </body>

@@ -13,7 +13,7 @@
   --bg2:#0b1d2f;
   --accent:#6cf3ff;
   --accent2:#8a5cff;
-  --muted:rgba(235,245,255,.78);
+  --muted:rgba(235,245,255,0.78);
 }
 *{box-sizing:border-box}
 html,body{
@@ -21,6 +21,7 @@ html,body{
   font-family:Inter,system-ui,sans-serif;
   color:#ecf7ff;
   background:linear-gradient(120deg,var(--bg1),var(--bg2));
+  overflow-x:hidden;
 }
 html::-webkit-scrollbar{display:none}
 
@@ -28,38 +29,40 @@ html::-webkit-scrollbar{display:none}
   position:fixed;
   inset:-30%;
   background:
-    radial-gradient(circle at 30% 40%,rgba(108,243,255,.22),transparent 45%),
-    radial-gradient(circle at 70% 60%,rgba(138,92,255,.22),transparent 50%);
+    radial-gradient(circle at 30% 40%,rgba(108,243,255,0.22),transparent 45%),
+    radial-gradient(circle at 70% 60%,rgba(138,92,255,0.22),transparent 50%);
   filter:blur(60px);
   z-index:0;
 }
 
-/* header */
+/* HEADER STABILIZED */
 header{
   position:fixed;
-  top:14px;left:0;right:0;
-  display:flex;justify-content:center;
-  z-index:50;
+  top:12px;
+  left:0;right:0;
+  display:flex;
+  justify-content:center;
+  z-index:100;
 }
 .nav{
   width:min(1200px,96%);
   display:flex;
-  justify-content:space-between;
   align-items:center;
 }
 .logo{
-  display:flex;align-items:center;gap:12px;
-  margin-left:-24px;
+  display:flex;
+  align-items:center;
+  gap:12px;
   cursor:pointer;
 }
 .logo video{
-  width:56px;height:56px;
+  width:54px;height:54px;
   border-radius:14px;
-  box-shadow:0 14px 40px rgba(0,0,0,.7);
+  box-shadow:0 14px 40px rgba(0,0,0,0.7);
 }
 .logo span{
   font-weight:700;
-  letter-spacing:.18em;
+  letter-spacing:0.18em;
   animation:logoShift 10s linear infinite;
 }
 @keyframes logoShift{
@@ -67,15 +70,76 @@ header{
   50%{color:var(--accent2)}
   100%{color:var(--accent)}
 }
-nav{display:flex;gap:10px}
-nav a{
+
+.header-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.header-right a{
   font-size:13px;
   padding:7px 14px;
   border-radius:999px;
-  background:rgba(0,0,0,.45);
-  border:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.08);
   color:#eafcff;
   text-decoration:none;
+  transition: 0.18s;
+}
+.header-right a:hover{transform:translateY(-2px); background:rgba(255,255,255,0.05);}
+
+/* LITEIFY STABILIZED */
+.liteify{
+  position:relative;
+}
+.liteify-toggle{
+  padding:7px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);
+  cursor:pointer;
+  backdrop-filter:blur(14px);
+  font-size:13px;
+  font-weight:600;
+  transition: 0.2s;
+}
+.liteify-panel{
+  position:absolute;
+  top:48px;
+  right:0;
+  width:280px;
+  padding:20px;
+  border-radius:24px;
+  background:rgba(6,10,22,0.8);
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 40px 100px rgba(0,0,0,0.8);
+  opacity:0;
+  transform:translateY(-12px) scale(0.95);
+  pointer-events:none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.liteify-panel.open{
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
+.liteify-controls{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+.play-btn{
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* main */
@@ -108,12 +172,12 @@ p{
 }
 .profile{
   width:260px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);
   border-radius:20px;
   padding:22px;
   backdrop-filter:blur(14px);
-  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  box-shadow:0 30px 80px rgba(0,0,0,0.6);
   animation:float 4s ease-in-out infinite;
 }
 @keyframes float{
@@ -125,21 +189,34 @@ p{
   border-radius:50%;
   object-fit:cover;
   margin-bottom:12px;
+  border: 2px solid rgba(255,255,255,0.1);
 }
 .profile h3{margin:8px 0 4px}
 .profile span{font-size:13px;color:var(--muted)}
 
 .join{
-  margin-top:36px;
+  margin-top:40px;
 }
 .join a{
   display:inline-block;
-  padding:12px 26px;
+  padding:14px 32px;
   border-radius:999px;
   background:linear-gradient(120deg,var(--accent),var(--accent2));
   color:#021018;
   font-weight:700;
   text-decoration:none;
+  transition: 0.2s;
+}
+.join a:hover{ transform: scale(1.05); }
+
+/* CURSOR TRAIL */
+.trail{position:fixed;inset:0;pointer-events:none;z-index:90}
+.dot{
+  position:absolute;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:rgba(108,243,255,0.85);
+  mix-blend-mode:screen;
 }
 </style>
 </head>
@@ -151,15 +228,33 @@ p{
 <header>
   <div class="nav">
     <div class="logo" onclick="location.href='index.html'">
-      <video src="LitecorLogo.mp4" autoplay muted loop></video>
+      <video src="LitecorLogo.mp4" autoplay muted loop playsinline></video>
       <span>LITECOR</span>
     </div>
-    <nav>
+
+    <div class="header-right">
       <a href="index.html">Home</a>
       <a href="editing.html">Editing</a>
-    </nav>
+
+      <div class="liteify">
+        <div class="liteify-toggle" id="liteifyToggle">Liteify</div>
+        <div class="liteify-panel" id="liteifyPanel">
+          <strong style="display:block; font-size: 16px;">Liteify</strong>
+          <span style="font-size:12px;color:var(--muted)">Now Playing: Chill Lofi Beat</span>
+          
+          <div class="liteify-controls">
+              <button class="play-btn" id="playBtn">
+                  <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5" style="accent-color:var(--accent); cursor: pointer; width: 100%;">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
+
+<audio id="bgMusic" loop src="music.mp3"></audio>
 
 <main>
 <section>
@@ -189,6 +284,67 @@ p{
   </div>
 </section>
 </main>
+
+<div class="trail" id="trail"></div>
+
+<script>
+/* cursor trail */
+const trail=document.getElementById('trail'),dots=[];
+for(let i=0;i<7;i++){
+  const d=document.createElement('div');
+  d.className='dot';
+  trail.appendChild(d);
+  dots.push({el:d,x:0,y:0});
+}
+let mx=0,my=0;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function loop(){
+  let x=mx,y=my;
+  dots.forEach((p,i)=>{
+    const s=0.35-i*0.04;
+    p.x+=(x-p.x)*s;
+    p.y+=(y-p.y)*s;
+    p.el.style.transform=`translate(${p.x}px,${p.y}px)`;
+    x=p.x;y=p.y;
+  });
+  requestAnimationFrame(loop);
+})();
+
+/* liteify logic */
+const lt=document.getElementById('liteifyToggle');
+const lp=document.getElementById('liteifyPanel');
+const audio=document.getElementById('bgMusic');
+const playBtn=document.getElementById('playBtn');
+const playIcon=document.getElementById('playIcon');
+const vol=document.getElementById('volumeSlider');
+
+lt.onclick=(e)=>{
+    e.stopPropagation();
+    lp.classList.toggle('open');
+};
+
+document.addEventListener('click', (e) => {
+    if(!lp.contains(e.target) && e.target !== lt) lp.classList.remove('open');
+});
+
+playBtn.onclick=()=>{
+    if(audio.paused){
+        audio.play();
+        playIcon.innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+    } else {
+        audio.pause();
+        playIcon.innerHTML='<path d="M8 5v14l11-7z"/>';
+    }
+};
+
+vol.oninput=()=>{ audio.volume = vol.value; localStorage.setItem('liteifyVol', vol.value); };
+
+if(localStorage.getItem('liteifyVol')){
+    const savedVol = localStorage.getItem('liteifyVol');
+    audio.volume = savedVol;
+    vol.value = savedVol;
+}
+</script>
 
 </body>
 </html>

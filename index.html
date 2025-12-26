@@ -13,10 +13,20 @@
     --glow1: rgba(108, 243, 253, 0.12);
     --glow2: rgba(138, 92, 255, 0.12);
 }
-*{box-sizing:border-box; -webkit-font-smoothing: antialiased;}
-html,body{ margin:0; font-family:Inter,sans-serif; color:#ecf7ff; background:var(--bg1); overflow-x:hidden; height:100%; }
 
-/* SCROLLBAR */
+/* EMERALD GLITCH THEME (Easter Egg) */
+body.glitch-mode {
+    --accent: #00ff9d;
+    --accent2: #0084ff;
+    --glow1: rgba(0, 255, 157, 0.25);
+    --glow2: rgba(0, 132, 255, 0.25);
+    filter: contrast(1.1) brightness(1.1);
+}
+
+*{box-sizing:border-box; -webkit-font-smoothing: antialiased;}
+html,body{ margin:0; font-family:Inter,sans-serif; color:#ecf7ff; background:var(--bg1); overflow-x:hidden; height:100%; transition: background 0.5s ease; }
+
+/* CUSTOM SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
@@ -24,7 +34,15 @@ html,body{ margin:0; font-family:Inter,sans-serif; color:#ecf7ff; background:var
 
 .bg{ position:fixed; inset:-15%; background: radial-gradient(circle at 20% 30%, var(--glow1), transparent 40%), radial-gradient(circle at 75% 65%, var(--glow2), transparent 45%); filter:blur(70px); z-index:0; pointer-events: none; will-change: transform; transition: 2.5s ease-in-out; }
 
-/* SLIM HEADER */
+/* PHYSICS CONFETTI */
+.confetti { position: fixed; width: 10px; height: 10px; bottom: -20px; z-index: 999; pointer-events: none; will-change: transform; }
+@keyframes celebration-burst {
+    0% { transform: translate(0, 0) rotateX(0) rotateY(0); opacity: 1; }
+    30% { opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) rotateX(var(--rx)) rotateY(var(--ry)); opacity: 0; }
+}
+
+/* HEADER */
 header{ 
   position:fixed; top:0; left:0; right:0; height: 65px; display:flex; justify-content:center; align-items: center;
   z-index:300; background: rgba(6, 9, 18, 0.4); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -39,19 +57,20 @@ header{
 .nav-center a{ font-size:12px; padding:7px 18px; border-radius:999px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:#fff; text-decoration:none; transition:0.3s; }
 .nav-center a:hover{ border-color: var(--accent); transform:translateY(-1px); }
 
-/* LITEIFY */
-.header-right{ justify-self: end; }
+/* LITEIFY PLAYER AREA */
+.header-right{ justify-self: end; display: flex !important; align-items: center !important; gap: 15px; }
 .liteify{ position:relative; }
 .liteify-toggle{ display: flex; align-items: center; gap: 7px; padding:7px 18px; border-radius:999px; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px); font-size:12px; font-weight:700; color:#fff; transition: 0.3s; }
 .liteify-toggle:hover{ border-color: var(--accent); }
-.liteify-toggle svg { color: var(--accent); }
+.liteify-toggle svg { color: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-.liteify-panel{ position:absolute; top:55px; right:-10px; width:290px; padding:22px; border-radius:28px; background:rgba(8,12,22,.98); backdrop-filter:blur(25px); border:1px solid rgba(255,255,255,.1); box-shadow:0 40px 100px rgba(0,0,0,0.8); opacity:0; transform:translateY(-10px) scale(.95); pointer-events:none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.liteify-panel{ position:absolute; top:55px; right:-10px; width:290px; padding:22px; border-radius:26px; background:rgba(8,12,22,.98); backdrop-filter:blur(25px); border:1px solid rgba(255,255,255,.1); box-shadow:0 40px 100px rgba(0,0,0,0.8); opacity:0; transform:translateY(-10px) scale(.95); pointer-events:none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 .liteify-panel.open{ opacity:1; transform:none; pointer-events:auto; }
 
 .track-name{ display: block; text-align:center; font-weight:700; color:var(--accent); margin-bottom:15px; font-size: 14px; }
 
-/* SPEAKER WAVE UI */
+/* SPEAKER VOLUME UI */
 .volume-section{ display: flex; align-items: center; gap: 12px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
 .speaker-box { display: flex; align-items: center; gap: 2px; width: 45px; color: var(--accent); }
 .speaker-wave { width: 3px; background: var(--accent); border-radius: 10px; opacity: 0.2; transition: 0.2s; }
@@ -59,13 +78,8 @@ header{
 .vol-slider{ -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; cursor:pointer; }
 .vol-slider::-webkit-slider-thumb{ -webkit-appearance: none; width: 12px; height: 12px; background: #fff; border-radius: 50%; }
 
-/* TOAST NOTIFICATION */
-#copy-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent); color: #000; padding: 12px 28px; border-radius: 999px; font-weight: 700; font-size: 13px; z-index: 1000; opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-#copy-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
+/* GLOBAL SHARED UI */
 main{ position:relative; z-index:10; transition: opacity 0.4s ease; padding-top: 65px; }
-
-/* SHARED UI */
 .container { width: min(1200px, 94%); margin: 0 auto; text-align: center; }
 .hero{ min-height:85vh; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .type-wrap{ font-size:clamp(40px,7vw,84px); font-weight:700; }
@@ -81,17 +95,27 @@ main{ position:relative; z-index:10; transition: opacity 0.4s ease; padding-top:
 .panel{ width: 100%; min-height: 220px; background: rgba(255,255,255,0.025); border-radius: 28px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(15px); transition: 0.3s; cursor: pointer; padding: 25px; }
 .panel:hover{ border-color: var(--accent); transform: translateY(-5px); background: rgba(255,255,255,0.045); }
 
-.contact-btn-vibrant{ display:inline-block; padding:14px 38px; border-radius:999px; background:linear-gradient(120deg, var(--accent), var(--accent2)); color:#021018; font-weight:700; text-decoration:none; box-shadow: 0 10px 20px rgba(108, 243, 255, 0.15); transition: 0.3s; border: none; cursor: pointer; }
-.contact-btn-vibrant:hover{ transform: scale(1.05) translateY(-2px); }
+.contact-btn-vibrant{ position: relative; display:inline-block; padding:14px 38px; border-radius:999px; background:linear-gradient(120deg, var(--accent), var(--accent2)); color:#021018; font-weight:700; text-decoration:none; box-shadow: 0 10px 20px rgba(108, 243, 255, 0.15); transition: 0.3s; border: none; cursor: pointer; overflow: hidden; }
+.contact-btn-vibrant .btn-text { transition: 0.3s; display: inline-block; }
+.contact-btn-vibrant .checkmark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 24px; height: 24px; stroke: #021018; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+.contact-btn-vibrant.success { background: #00ff9d; box-shadow: 0 0 25px rgba(0, 255, 157, 0.4); }
+.contact-btn-vibrant.success .btn-text { opacity: 0; transform: scale(0.5); }
+.contact-btn-vibrant.success .checkmark { transform: translate(-50%, -50%) scale(1.2) !important; }
 
 /* PFP GLOW */
 .pfp-wrap { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
 .pfp-glow { position: absolute; inset: -5px; border-radius: 50%; background: var(--accent); filter: blur(15px); opacity: 0.4; animation: breathe 3s infinite ease-in-out; z-index: -1; transition: background 2s ease; }
 @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.15); opacity: 0.6; } }
 
-iframe{ width:100%; height:450px; border-radius:28px; border:none; background:rgba(0,0,0,0.2); margin-top: 40px; }
+#copy-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent); color: #000; padding: 12px 28px; border-radius: 999px; font-weight: 700; font-size: 13px; z-index: 1000; opacity: 0; transition: 0.4s; }
+#copy-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
 .trail{ position:fixed; inset:0; pointer-events:none; z-index:999; }
-.dot{ position:absolute; width:6px; height:6px; background:var(--accent); border-radius:50%; }
+.dot{ position:absolute; width:6px; height:6px; background:var(--accent); border-radius:50%; transition: background 0.2s; }
+.dot.rainbow { background: hsl(var(--hue, 0), 100%, 50%); }
+
+iframe{ width:100%; height:450px; border-radius:28px; border:none; background:rgba(0,0,0,0.2); margin-top: 40px; }
 </style>
 </head>
 <body>
@@ -101,7 +125,7 @@ iframe{ width:100%; height:450px; border-radius:28px; border:none; background:rg
 
 <header>
   <div class="nav">
-    <div class="logo" onclick="navigateTo('home-content.html', 'index')">
+    <div class="logo" id="logo-trigger" onclick="navigateTo('home-content.html', 'index')">
       <video src="LitecorLogo.mp4" autoplay muted loop playsinline></video>
       <span>LITECOR</span>
     </div>
@@ -131,6 +155,7 @@ iframe{ width:100%; height:450px; border-radius:28px; border:none; background:rg
           </div>
         </div>
       </div>
+      <img id="dance-gif" src="dance.gif" alt="dance" style="height: 38px; width: auto; border-radius: 8px; opacity: 0; transition: opacity 0.4s ease; display: block;">
     </div>
   </div>
 </header>
@@ -143,30 +168,41 @@ iframe{ width:100%; height:450px; border-radius:28px; border:none; background:rg
 let mx=0, my=0;
 document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive: true});
 
-// GLOBAL GLITCH SOUND
-function playGlitch() {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(150, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.04, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.start(); osc.stop(ctx.currentTime + 0.1);
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(freq = 800) {
+    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
 }
 
-// COPY ID LOGIC
-function copyID(id) {
-    navigator.clipboard.writeText(id);
-    const toast = document.getElementById('copy-toast');
-    toast.textContent = "ID Copied: " + id;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
+// CONFETTI CANNONS
+let canConfetti = true;
+function launchConfetti() {
+    if (!canConfetti) return;
+    canConfetti = false;
+    playSound(400);
+    const colors = ['#6cf3ff', '#8a5cff', '#00ff9d', '#ffffff'];
+    for (let i = 0; i < 80; i++) {
+        const c = document.createElement('div'); c.className = 'confetti';
+        const isLeft = Math.random() > 0.5;
+        c.style.left = isLeft ? '-10px' : 'calc(100% + 10px)';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 8 + 6;
+        c.style.width = size + 'px'; c.style.height = (size * 0.6) + 'px';
+        const xDist = isLeft ? (Math.random() * 50 + 20) : -(Math.random() * 50 + 20);
+        const yDist = -(Math.random() * 80 + 40);
+        c.style.setProperty('--x', xDist + 'vw'); c.style.setProperty('--y', yDist + 'vh');
+        c.style.setProperty('--rx', Math.random() * 1080 + 'deg'); c.style.setProperty('--ry', Math.random() * 1080 + 'deg');
+        c.style.animation = `celebration-burst ${Math.random() * 1.5 + 2}s cubic-bezier(0.1, 0.8, 0.3, 1) forwards`;
+        document.body.appendChild(c); setTimeout(() => c.remove(), 3500);
+    }
+    setTimeout(() => canConfetti = true, 2500);
 }
 
-// SPA
+// SPA NAVIGATION
 async function navigateTo(url, type) {
   const content = document.getElementById('content-area');
   content.style.opacity = '0';
@@ -185,15 +221,18 @@ async function navigateTo(url, type) {
   }, 350);
 }
 
-// AUDIO ENGINE
+// AUDIO ENGINE WITH EXACT FILENAMES
 const playlist = [
-  {n:"Midnight Drive", f:"track1.mp3", c1:"rgba(108,243,255,0.15)", c2:"rgba(138,92,255,0.15)", a:"#6cf3ff"},
-  {n:"Neon Pulse", f:"track2.mp3", c1:"rgba(255,108,243,0.15)", c2:"rgba(108,243,255,0.15)", a:"#ff6cf3"},
-  {n:"Ether Beats", f:"track3.mp3", c1:"rgba(108,255,150,0.15)", c2:"rgba(138,92,255,0.15)", a:"#6cff96"},
-  {n:"Cyber Dreams", f:"track4.mp3", c1:"rgba(255,180,108,0.15)", c2:"rgba(255,108,108,0.15)", a:"#ffb46c"}
+  {n:"New Magic Wand", f:"Tyler, The Creator - NEW MAGIC WAND (feat. Santigold & Jessy Wilson).mp3", c1:"rgba(255,108,108,0.15)", c2:"rgba(6,9,18,0.5)", a:"#ff6c6c"},
+  {n:"Sicko Mode", f:"Travis Scott - SICKO MODE ft. Drake.mp3", c1:"rgba(108,243,255,0.15)", c2:"rgba(138,92,255,0.15)", a:"#6cf3ff"},
+  {n:"See You Again", f:"Tyler, The Creator - See You Again (Audio) ft. Kali Uchis.mp3", c1:"rgba(255,180,108,0.15)", c2:"rgba(255,255,108,0.15)", a:"#ffb46c"},
+  {n:"Starboy", f:"The Weeknd - Starboy (Lyrics) ft. Daft Punk.mp3", c1:"rgba(138,92,255,0.15)", c2:"rgba(6,9,18,0.5)", a:"#8a5cff"},
+  {n:"Timeless", f:"The Weeknd, Playboi Carti - Timeless (Lyrics).mp3", c1:"rgba(108,243,255,0.15)", c2:"rgba(138,92,255,0.15)", a:"#6cf3ff"},
+  {n:"Monëy so big", f:"Monëy so big.mp3", c1:"rgba(108,255,150,0.15)", c2:"rgba(138,92,255,0.15)", a:"#6cff96"}
 ];
 let trackIdx = Math.floor(Math.random() * playlist.length);
-const audio = document.getElementById('audio'), vol = document.getElementById('vol');
+const audio = document.getElementById('audio'), playBtn = document.getElementById('play'), pIcon = document.getElementById('playIcon'), vol = document.getElementById('vol'), tn = document.getElementById('tn');
+const danceGif = document.getElementById('dance-gif');
 
 function updateWaves(v) {
     const waves = document.querySelectorAll('.speaker-wave');
@@ -204,38 +243,81 @@ function updateWaves(v) {
 }
 
 function loadTrack(idx) {
-  const t = playlist[idx]; audio.src = t.f; document.getElementById('tn').textContent = t.n;
+  const t = playlist[idx]; audio.src = t.f; tn.textContent = t.n;
   document.documentElement.style.setProperty('--glow1', t.c1);
   document.documentElement.style.setProperty('--glow2', t.c2);
   document.documentElement.style.setProperty('--accent', t.a);
 }
 
 audio.volume = 0.35; loadTrack(trackIdx);
-setTimeout(() => updateWaves(0.35), 100);
+window.addEventListener('load', () => updateWaves(0.35));
 
-audio.onloadedmetadata = () => document.getElementById('durT').textContent = fmtTime(audio.duration);
-audio.ontimeupdate = () => document.getElementById('curT').textContent = fmtTime(audio.currentTime);
+// Toggling Logic
+playBtn.onclick = () => { if (audio.paused) audio.play().catch(()=>{}); else audio.pause(); };
+
+audio.onplay = () => { 
+    pIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; 
+    danceGif.style.opacity = "1"; // Show GIF when playing
+};
+audio.onpause = () => { 
+    pIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; 
+    danceGif.style.opacity = "0"; // Hide GIF when paused
+};
 audio.onended = () => { trackIdx = (trackIdx + 1) % playlist.length; loadTrack(trackIdx); audio.play(); };
 
 vol.oninput = () => { audio.volume = vol.value; updateWaves(vol.value); };
-document.getElementById('play').onclick = () => {
-    if(audio.paused) { audio.play().catch(()=>{}); document.getElementById('playIcon').innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; }
-    else { audio.pause(); document.getElementById('playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>'; }
-};
 document.getElementById('next').onclick = () => { trackIdx = (trackIdx + 1) % playlist.length; loadTrack(trackIdx); audio.play(); };
 document.getElementById('prev').onclick = () => { trackIdx = (trackIdx - 1 + playlist.length) % playlist.length; loadTrack(trackIdx); audio.play(); };
 
 function fmtTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec < 10 ? '0' : ''}${sec}`; }
+audio.onloadedmetadata = () => document.getElementById('durT').textContent = fmtTime(audio.duration);
+audio.ontimeupdate = () => document.getElementById('curT').textContent = fmtTime(audio.currentTime);
 
+// EASTER EGGS
+let logoClicks = 0;
+document.getElementById('logo-trigger').onclick = (e) => {
+    logoClicks++; playSound(800);
+    if(logoClicks === 5) { document.body.classList.toggle('glitch-mode'); playSound(200); logoClicks = 0; } 
+    else { navigateTo('home-content.html', 'index'); }
+};
+
+let inputBuffer = "";
+let rainbowMode = false, hue = 0;
+document.addEventListener('keydown', e => {
+    if(e.key.toLowerCase() === 'j') document.getElementById('prev').click();
+    if(e.key.toLowerCase() === 'k') playBtn.click();
+    if(e.key.toLowerCase() === 'l') document.getElementById('next').click();
+    inputBuffer += e.key.toUpperCase();
+    if(inputBuffer.includes("CHEEKU") || inputBuffer.includes("LITECOR")) {
+        if(inputBuffer.includes("CHEEKU")) { rainbowMode = true; setTimeout(() => rainbowMode = false, 10000); }
+        launchConfetti(); inputBuffer = "";
+    }
+    if(inputBuffer.length > 8) inputBuffer = inputBuffer.substring(1);
+});
+
+// TRAIL RENDERING
 const dots = [];
 for(let i=0; i<7; i++) { const d = document.createElement('div'); d.className = 'dot'; document.getElementById('trail').appendChild(d); dots.push({el: d, x: 0, y: 0}); }
 function render() {
     document.getElementById('bg').style.transform = `translate3d(${(mx/window.innerWidth-0.5)*30}px, ${(my/window.innerHeight-0.5)*30}px, 0)`;
     let x = mx, y = my;
-    dots.forEach((p, i) => { p.x += (x - p.x) * (0.3 - i*0.03); p.y += (y - p.y) * (0.3 - i*0.03); p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`; x = p.x; y = p.y; });
-    requestAnimationFrame(render);
+    dots.forEach((p, i) => { 
+        p.x += (x - p.x) * (0.3 - i*0.03); p.y += (y - p.y) * (0.3 - i*0.03);
+        p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`; 
+        if(rainbowMode) { p.el.classList.add('rainbow'); p.el.style.setProperty('--hue', hue + (i * 20)); }
+        else { p.el.classList.remove('rainbow'); p.el.style.background = ''; }
+        x = p.x; y = p.y; 
+    });
+    if(rainbowMode) hue++; requestAnimationFrame(render);
 }
 render();
+
+function copyID(id) {
+    navigator.clipboard.writeText(id);
+    const toast = document.getElementById('copy-toast');
+    toast.textContent = "ID Copied: " + id; toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
 
 const lt = document.getElementById('lt'), lp = document.getElementById('lp');
 lt.onclick = e => { e.stopPropagation(); lp.classList.toggle('open'); };

@@ -1,0 +1,9 @@
+<div class="container" style="max-width: 480px; padding-top: 20px;">
+  <h2 style="font-size: 32px; margin-bottom: 25px;">Send a Message</h2>
+  <form onsubmit="event.preventDefault(); alert('Message Sent!'); navigateTo('home-content.html', 'index')">
+    <input type="text" placeholder="Your Name" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none;">
+    <input type="email" placeholder="Your Email" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none;">
+    <textarea rows="4" placeholder="Project details..." required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 12px; color: #fff; margin-bottom: 20px; outline: none; font-family: inherit; resize: none;"></textarea>
+    <button type="submit" class="contact-btn-vibrant" style="width: 100%; border: none; cursor: pointer;">Send Message</button>
+  </form>
+</div>

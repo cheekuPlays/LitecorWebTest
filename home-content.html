@@ -1,0 +1,25 @@
+<div class="container">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="type-wrap"><span id="typed"></span><span class="cursor"></span></div>
+      <p style="color:var(--muted); margin-top: 15px; font-size: 18px;">Knowing what to remove is the art of storytelling.</p>
+      <div class="scroll-hint" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">
+        <span>Explore</span>
+        <div class="arrow"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panels-section" id="panels">
+    <div class="card-grid-2">
+      <div class="panel" id="editZone" onclick="navigateTo('editing-content.html', 'editing')">
+        <h2 style="margin:0; font-size: 32px;">Editing</h2>
+        <p style="font-size: 11px; color: var(--accent); margin-top:10px; text-transform: uppercase; letter-spacing: 1px;">Portfolio</p>
+      </div>
+      <div class="panel" id="discZone" onclick="navigateTo('discord-content.html', 'discord')">
+        <h2 style="margin:0; font-size: 32px;">Discord</h2>
+        <p style="font-size: 11px; color: var(--accent); margin-top:10px; text-transform: uppercase; letter-spacing: 1px;">Community</p>
+      </div>
+    </div>
+  </section>
+</div>

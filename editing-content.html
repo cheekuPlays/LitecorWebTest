@@ -1,23 +1,36 @@
-<div class="container" style="padding-top: 40px;">
-  <h1 style="font-size: clamp(52px, 8vw, 84px); margin-bottom: 5px;">Editing Portfolio</h1>
+<div class="container" style="padding-top: 40px; text-align: left; max-width: 900px;">
+  <h1 style="font-size: clamp(40px, 6vw, 68px); margin-bottom: 30px; line-height: 1;">Editing Portfolio</h1>
   
-  <div style="margin-top: 30px; margin-bottom: 45px;">
-    <a href="#" class="contact-btn-vibrant" onclick="navigateTo('contact-content.html', 'contact')">Contact Now</a>
+  <div style="max-width: 800px; margin-bottom: 50px;">
+    <p style="font-size: 20px; line-height: 1.5; color: #fff; margin-bottom: 25px; font-weight: 800;">
+        Bringing 3–4 years of hands-on editing experience, I’ve collaborated with a diverse range of creators and brands to craft content that cuts through crowded niches.
+    </p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; color: var(--muted); font-size: 17px; line-height: 1.7;">
+        <div>
+            My work spans everything from fast-paced short-form highlights designed to stop the scroll, to long-form narrative-driven videos built to retain viewers.
+        </div>
+        <div>
+            I’ve partnered with top YouTubers, including <span style="color:var(--accent);font-weight:800;">Inspector Mindblow</span>, consistently delivering polished, high-impact edits.
+        </div>
+    </div>
+    
+    <p style="font-size: 17px; line-height: 1.7; color: var(--muted); margin-top: 30px; font-style: italic; border-left: 2px solid var(--accent); padding-left: 20px;">
+        Every project is approached with a sharp eye for pacing, structure, and audience psychology, because good edits don’t just look clean, they perform.
+    </p>
   </div>
 
-  <div class="card-grid-2" style="max-width: 650px;">
-    <div class="panel" style="min-height: 140px;" onmouseenter="playGlitch()">
-      <h3 style="margin:0; font-size: 20px;">Longform</h3>
-      <p style="font-size: 12px; margin-top: 8px; color:var(--muted)">Narrative Drive</p>
-    </div>
-    <div class="panel" style="min-height: 140px;" onmouseenter="playGlitch()">
-      <h3 style="margin:0; font-size: 20px;">Shorts</h3>
-      <p style="font-size: 12px; margin-top: 8px; color:var(--muted)">Clipping & Retention</p>
+  <div style="display: flex; align-items: center; gap: 25px; margin-bottom: 100px;">
+    <a href="#" class="contact-btn-vibrant" onclick="navigateTo('contact-content.html', 'contact')">Work With Me</a>
+    
+    <div class="scroll-hint" style="opacity: 0.6; flex-direction: row; align-items: center; gap: 10px;" onclick="document.getElementById('samples').scrollIntoView({behavior:'smooth'})">
+        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">View Samples</span>
+        <div class="arrow" style="width: 10px; height: 10px; margin-top: -5px;"></div>
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 35px; padding-bottom: 100px;">
-    <iframe src="https://www.youtube.com/embed/T4LQeFQnjWU" allowfullscreen></iframe>
-    <iframe src="https://www.youtube.com/embed/759NWZ98wFE" allowfullscreen></iframe>
+  <div id="samples" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding-bottom: 150px;">
+      <iframe src="https://www.youtube.com/embed/T4LQeFQnjWU" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/759NWZ98wFE" allowfullscreen></iframe>
   </div>
 </div>

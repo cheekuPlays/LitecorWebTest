@@ -1,27 +1,47 @@
-<div class="container" style="padding-top: 10px;">
-  <h1 style="font-size: clamp(32px, 4vw, 54px); margin-bottom: 5px;">We work in Discord</h1>
-  <p style="max-width: 600px; margin: 0 auto 30px; font-size: 15px; color: var(--muted);">Click a profile to copy their Discord ID.</p>
-  
-  <div class="card-grid-2" style="max-width: 780px; gap: 25px;">
-    <div class="panel" style="min-height: 210px; padding: 15px;" onclick="copyID('litecor')">
-      <div class="pfp-wrap" style="width: 85px; height: 85px;">
-          <div class="pfp-glow"></div>
-          <video src="LitecorLogo.mp4" autoplay muted loop playsinline style="width:100%; height:100%; border-radius:50%; border:2px solid var(--accent); object-fit: cover; position:relative;"></video>
-      </div>
-      <h3 style="margin: 0; font-size: 20px;">Litecor</h3>
-      <p style="font-size: 10px; color: var(--accent); text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Lead Editor</p>
+<div class="container" style="padding-top: 70px; max-width: 1100px; text-align: left;">
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: start;">
+    
+    <div>
+        <h1 style="font-size: clamp(40px, 6vw, 68px); margin-bottom: 20px; font-weight: 800;">Discord Systems</h1>
+        <div style="border-left: 3px solid var(--accent); padding-left: 30px;">
+            <h3 style="font-size: 24px; margin-bottom: 15px; font-weight: 800;">What We Do</h3>
+            <p style="color: var(--muted); font-size: 18px; line-height: 1.6; margin-bottom: 25px;">
+                We build and manage clean, scalable Discord servers for creators, games, and online communities. Most servers break as they grow. <span style="color: #fff;">We design systems that don’t.</span>
+            </p>
+            <ul style="list-style: none; padding: 0; color: var(--muted); line-height: 2.2; font-size: 16px;">
+                <li>• Discord server setup (channels, roles, bots)</li>
+                <li>• Server organization and structure</li>
+                <li>• Ongoing server management</li>
+                <li>• Moderation (Available separately)</li>
+            </ul>
+        </div>
     </div>
-    <div class="panel" style="min-height: 210px; padding: 15px;" onclick="copyID('mithun_cheeku')">
-      <div class="pfp-wrap" style="width: 85px; height: 85px;">
-          <div class="pfp-glow"></div>
-          <img src="cheeku.jpg" style="width:100%; height:100%; border-radius:50%; border:2px solid var(--accent); object-fit: cover; position:relative;">
-      </div>
-      <h3 style="margin: 0; font-size: 20px;">Cheeku</h3>
-      <p style="font-size: 10px; color: var(--accent); text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Partner</p>
+
+    <div style="display: flex; flex-direction: column; gap: 30px; padding-top: 20px;">
+        <div class="card-grid-2" style="gap: 15px;">
+            <div class="panel" style="padding: 25px; text-align: center;" onclick="copyID('litecor')">
+                <div class="pfp-wrap" style="width: 70px; height: 70px; margin: 0 auto 12px;">
+                    <div class="pfp-glow"></div>
+                    <video src="LitecorLogo.mp4" autoplay muted loop playsinline style="width:100%; height:100%; border-radius:50%; object-fit: cover; position: relative;"></video>
+                </div>
+                <h3 style="margin: 0; font-size: 18px;">Litecor</h3>
+                <span style="font-size: 9px; color: var(--accent); font-weight: 800; letter-spacing: 1px;">COPY ID</span>
+            </div>
+
+            <div class="panel" style="padding: 25px; text-align: center;" onclick="copyID('mithun_cheeku')">
+                <div class="pfp-wrap" style="width: 70px; height: 70px; margin: 0 auto 12px;">
+                    <div class="pfp-glow"></div>
+                    <img src="cheeku.jpg" style="width:100%; height:100%; border-radius:50%; object-fit: cover; position: relative;">
+                </div>
+                <h3 style="margin: 0; font-size: 18px;">Cheeku</h3>
+                <span style="font-size: 9px; color: var(--accent); font-weight: 800; letter-spacing: 1px;">COPY ID</span>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <a href="#" class="contact-btn-vibrant" style="text-align: center;" onclick="navigateTo('contact-content.html', 'contact')">Contact Now</a>
+            <a href="https://discord.gg/kUnY8PJsCK" target="_blank" class="contact-btn-vibrant secondary" style="text-align: center;">Join Discord</a>
+        </div>
     </div>
-  </div>
-  
-  <div style="margin-top: 40px;">
-    <a href="#" class="contact-btn-vibrant" onclick="navigateTo('contact-content.html', 'contact')">Contact Now</a>
   </div>
 </div>

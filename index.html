@@ -7,8 +7,8 @@
 <style>
 /* CUSTOM FONTS */
 @font-face { font-family: 'PPEditorial'; src: url('PPEditorialNew-Regular.otf') format('opentype'); font-weight: normal; font-style: normal; }
-@font-face { font-family: 'PPEditorial'; src: url('PPEditorialNew-Ultrabold.otf') format('opentype'); font-weight: 800; font-style: normal; }
-@font-face { font-family: 'PPEditorialItalic'; src: url('PPEditorialNew-Italic.otf') format('opentype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'PPEditorialBold'; src: url('PPEditorialNew-Ultrabold.otf') format('opentype'); font-weight: 800; font-style: normal; }
+@font-face { font-family: 'PPEditorialItalic'; src: url('PPEditorialNew-Italic.otf') format('opentype'); font-weight: normal; font-style: italic; }
 
 :root{ 
     --bg1:#060912; --bg2:#0b1d2f; 
@@ -30,10 +30,20 @@ body.bass-boost { animation: bass-vibe 0.1s infinite; }
 }
 
 *{box-sizing:border-box; -webkit-font-smoothing: antialiased;}
-html,body{ margin:0; font-family:'PPEditorialItalic', serif; color:#ecf7ff; background:var(--bg1); overflow-x:hidden; min-height:100vh; }
 
-h1, h2, h3, .logo span, .nav-center a, .contact-btn-vibrant, .track-name, .loader-text, .cursor, .panel h2 { 
-    font-family: 'PPEditorial', serif; font-style: normal; 
+/* GLOBAL: NORMAL FONT FOR BODY AND BUTTONS */
+html,body{ margin:0; font-family:'PPEditorial', serif; color:#ecf7ff; background:var(--bg1); overflow-x:hidden; min-height:100vh; }
+
+/* TITLES: USE THE ATTACHED ITALIC FONT  */
+h1, h2, h3, .logo span, .track-name, .loader-text, .panel h2, #typed { 
+    font-family: 'PPEditorialItalic', serif !important; 
+    font-style: italic !important;
+}
+
+/* BUTTONS: REVERT TO NORMAL FONT */
+.nav-center a, .contact-btn-vibrant {
+    font-family: 'PPEditorial', serif !important;
+    font-style: normal !important;
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -90,7 +100,6 @@ main{ position:relative; z-index:10; transition: opacity 0.3s ease; padding-top:
 .scroll-hint{ display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
 .arrow{ width: 18px; height: 18px; border-left: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: rotate(-45deg); animation: bounce 2s infinite; }
 
-/* LARGE COOL GRID STYLING FOR SAMPLES */
 #samples { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; padding-bottom: 150px; width: 100%; }
 iframe { width:100%; height:450px; border-radius:28px; border:none; background:rgba(0,0,0,0.2); }
 
@@ -106,7 +115,7 @@ iframe { width:100%; height:450px; border-radius:28px; border:none; background:r
 </head>
 <body>
 
-<div id="loader"><div style="font-family: 'PPEditorial', serif; font-size: 14px; letter-spacing: 5px; color: var(--accent); font-weight: 800;">SYSTEM INITIALIZING...</div></div>
+<div id="loader"><div style="font-family: 'PPEditorialItalic', serif; font-size: 14px; letter-spacing: 5px; color: var(--accent); font-weight: 800;">SYSTEM INITIALIZING...</div></div>
 <div class="bg" id="bg"></div>
 <div id="copy-toast">ID Copied!</div>
 
@@ -225,8 +234,8 @@ function loadTrack(idx) {
   document.documentElement.style.setProperty('--glow2', t.c2);
   document.documentElement.style.setProperty('--accent', t.a);
 }
-
 audio.volume = 0.35; loadTrack(trackIdx);
+
 playBtn.onclick = () => { if (audio.paused) audio.play(); else audio.pause(); };
 audio.onplay = () => { pIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; danceGif.style.opacity = "1"; };
 audio.onpause = () => { pIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; danceGif.style.opacity = "0"; };
@@ -271,7 +280,6 @@ document.addEventListener('keydown', e => {
     if(inputBuffer.length > 8) inputBuffer = inputBuffer.substring(1);
 });
 
-// CURSOR ENGINE
 const dots = [];
 const cheekuChars = "CHEEKU";
 for(let i=0; i<6; i++) { 

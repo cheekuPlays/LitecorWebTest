@@ -1,24 +1,17 @@
 <div class="container">
   <section class="hero" style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden;">
-    
-    <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: -1;">
-        <video src="HomeBg.mp4" autoplay muted loop playsinline 
-          style="width: 90%; height: auto; max-height: 100%; object-fit: contain; opacity: 0.15; pointer-events: none;">
-        </video>
-    </div>
-
+    <video src="HomeBg.mp4" autoplay muted loop playsinline style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -1; opacity: 0.15; pointer-events: none;"></video>
     <div class="hero-inner" style="position: relative; z-index: 1;">
       <div class="type-wrap" style="font-size: clamp(42px, 8vw, 84px); font-weight: 800;"><span id="typed"></span><span class="cursor"></span></div>
       <p style="color:var(--muted); margin-top: 20px; font-size: 22px;">Knowing what to remove is the art of storytelling.</p>
     </div>
-    
-    <div class="scroll-hint" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 2;" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-hint" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">
         <span style="font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;">Scroll to explore</span>
         <div class="arrow"></div>
     </div>
   </section>
 
-  <section class="panels-section" id="panels" style="padding-bottom: 150px;">
+  <section class="panels-section" id="panels" style="padding-bottom: 150px; position: relative; z-index: 1;">
     <div class="card-grid-2">
       <div class="panel" id="editZone" style="padding: 65px;" onclick="navigateTo('editing-content.html', 'editing')">
         <h2 style="margin:0; font-size: 42px; font-weight: 800;">Editing</h2>
